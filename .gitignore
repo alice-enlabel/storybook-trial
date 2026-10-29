@@ -1,2 +1,6 @@
 # Claude Code git worktrees (isolated working copies, one per session)
 .claude/worktrees/
+
+# Dependencies and logs (react-viewer/ has its own .gitignore too)
+node_modules/
+*.log
