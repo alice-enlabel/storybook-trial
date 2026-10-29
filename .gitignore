@@ -1,0 +1,2 @@
+# Claude Code git worktrees (isolated working copies, one per session)
+.claude/worktrees/
