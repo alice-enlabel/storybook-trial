@@ -1,13 +1,13 @@
 /* Document viewer page. Sizes, spacing and motion follow the HTML prototype
    (../index.html). Mobile first; desktop from 900px. */
 
-.page {
+.doc-page {
   min-height: 100dvh;
   background: var(--color-surface-default);
 }
 
 /* Site header ----------------------------------------------------------- */
-.page > .ui-app-header {
+.doc-page > .ui-app-header {
   padding: 12px max(var(--gutter), env(safe-area-inset-left, 0px));
   background: #f9f9f9;
   border-bottom: 1px solid #a7abae;
@@ -401,7 +401,7 @@ html.fs-lock {
 .stage__panel[data-state='closing'] {
   animation: sheet-out var(--duration-panel) var(--ease-out) forwards;
 }
-.page--info-open {
+.doc-page--info-open {
   padding-bottom: 75dvh;
 }
 
@@ -1039,7 +1039,7 @@ html.fs-lock {
   .stage__panel[data-state='closing'] {
     animation: panel-out var(--duration-panel) ease-in forwards;
   }
-  .page--info-open {
+  .doc-page--info-open {
     padding-bottom: 0;
   }
   .docinfo::before {

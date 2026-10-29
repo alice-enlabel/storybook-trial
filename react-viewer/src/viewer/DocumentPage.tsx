@@ -120,7 +120,7 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
   const withInfo = panel.mounted && panel.state === 'open'
 
   return (
-    <div className={['page', withInfo && 'page--info-open'].filter(Boolean).join(' ')}>
+    <div className={['doc-page', withInfo && 'doc-page--info-open'].filter(Boolean).join(' ')}>
       <AppHeader logo={<img src={logo} alt="eIFU" width={198} height={100} className="page__logo" />} onMenu={() => toast('Site menu')} />
 
       <main className="page__main">
