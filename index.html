@@ -1,0 +1,1062 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>eIFU Document Viewer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Layout: site header → search card → doc title row with 3 trigger buttons → viewer.
+   Mobile (<900px): menus are popovers; doc info is a bottom sheet (max 75% of the screen) over the page.
+   Desktop: menus are popovers, doc info is a side panel sharing the row with the viewer.
+   See reference images/dev_*. Single light theme on purpose: this is a product prototype of the eIFU site. */
+:root {
+  --eifu-teal: #447995;
+  --hover-bg: #CECECE;
+  --hover-state: #BFD2E0;
+  --subheadings: #5B6B75;
+  --borders: #E4E9EC;
+  --text: #1A1A1A;
+  --qr-ink: #34445C;
+  --page-bg: #FFFFFF;
+  --chrome-bg: #F9F9F9;
+  --viewer-bg: #D9DADC;
+  --field-border: #8A8F94;
+  --shadow: 0 6px 24px rgba(26, 26, 26, .14), 0 1px 3px rgba(26, 26, 26, .08);
+  --font-ui: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --gutter: 16px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--page-bg); color: var(--text); }
+body { font-family: var(--font-ui); font-size: 16px; line-height: 1.4; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--eifu-teal); outline-offset: 2px; border-radius: 4px; }
+.wrap {
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Site header ---------- */
+.site-header { background: var(--chrome-bg); border-bottom: 1px solid #A7ABAE; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: 12px; }
+.logo { display: block; }
+.logo img { display: block; height: 52px; width: auto; }
+.burger { width: 48px; height: 40px; display: grid; place-items: center; }
+.burger svg { width: 40px; height: 26px; }
+
+/* ---------- Search ---------- */
+.search { margin-top: 16px; }
+.search form {
+  border: 1px solid #6E7377; border-radius: 10px; padding: 18px 16px 16px;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px;
+}
+.search label { display: grid; gap: 8px; font-size: 19px; }
+.search input { width: 100%; height: 44px; border: 1px solid var(--field-border); border-radius: 10px; padding: 0 12px; font: inherit; font-size: 16px; }
+.search .go { width: 86px; height: 40px; border-radius: 8px; background: #C4C4C4; display: grid; place-items: center; color: #3A3A3A; }
+.search .go svg { width: 28px; height: 28px; }
+.search .go span { display: none; }
+
+/* ---------- Doc header ---------- */
+.crumbs { margin-top: 16px; font-size: 15px; }
+.crumbs a { color: var(--eifu-teal); }
+.crumbs .full { display: none; color: var(--subheadings); }
+.back { display: none; }
+.doc-head {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 6px; align-items: center; padding-block: 4px 8px;
+}
+.doc-head .ttl { display: contents; }
+.doc-head h1 { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.2; text-wrap: balance; }
+.doc-head .meta { grid-column: 1 / -1; grid-row: 2; margin-top: 4px; color: var(--subheadings); font-size: 14px; font-variant-numeric: tabular-nums; }
+.doc-actions { grid-column: 2; grid-row: 1; position: relative; display: flex; gap: 2px; flex-shrink: 0; z-index: 30; }
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; color: var(--eifu-teal);
+  transition: background-color .12s;
+}
+.icon-btn svg { width: 30px; height: 30px; }
+.icon-btn.kebab svg { width: 26px; height: 26px; }
+.icon-btn:hover { background: var(--hover-state); }
+.icon-btn[aria-expanded="true"] { background: var(--hover-bg); }
+/* hover/focus tooltips; hidden while that button's menu or panel is open */
+.icon-btn[data-tip] { position: relative; }
+.icon-btn[data-tip]::after {
+  content: attr(data-tip); position: absolute; top: calc(100% + 8px); left: 50%; translate: -50% 0; z-index: 45;
+  background: #22313B; color: #fff; font-size: 14px; font-weight: 500; line-height: 1.3; white-space: nowrap;
+  padding: 8px; border-radius: 8px; box-shadow: var(--shadow); pointer-events: none;
+  opacity: 0; transition: opacity .12s;
+}
+.icon-btn.kebab[data-tip]::after { left: auto; right: 0; translate: none; }   /* keep the last one on screen */
+@media (hover: hover) { .icon-btn[data-tip]:hover::after { opacity: 1; transition-delay: .35s; } }
+.icon-btn[data-tip]:focus-visible::after { opacity: 1; }
+.icon-btn[data-tip][aria-expanded="true"]::after { opacity: 0; transition-delay: 0s; }
+
+/* ---------- Popovers ---------- */
+.popover {
+  position: absolute; top: calc(100% + 6px); right: 0; background: #fff; border-radius: 8px;
+  box-shadow: var(--shadow); z-index: 40; animation: pop .14s ease-out;
+}
+@keyframes pop { from { opacity: 0; transform: translateY(-4px); } }
+.menu { list-style: none; margin: 0; padding: 6px 0; min-width: 236px; }
+.menu button {
+  width: 100%; display: flex; align-items: center; gap: 18px; padding: 11px 22px; font-size: 19px; text-align: left;
+}
+.menu button:hover, .menu button:focus-visible { background: #EEF3F6; outline-offset: -2px; }
+.menu svg { width: 28px; height: 28px; color: var(--eifu-teal); flex-shrink: 0; }
+/* favorite toggle: outline heart → filled heart, both eIFU teal */
+.heart .on, [aria-pressed="true"] > .heart .off { display: none; }
+[aria-pressed="true"] > .heart .on { display: inline; }
+.qr-pop { padding: 28px 28px 20px; display: grid; justify-items: center; gap: 14px; }
+.qr-pop .qr { width: 216px; height: 216px; }
+.link-btn { color: var(--eifu-teal); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.qr-pop .link-btn { font-size: 26px; }
+.scrim { position: fixed; inset: 0; background: rgba(26, 26, 26, .09); z-index: 20; }
+
+/* ---------- Viewer + panel ---------- */
+.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; padding-bottom: 32px; }
+.viewer { border-top: 1px solid #B9BDC0; background: var(--viewer-bg); min-width: 0; }
+.pdf-bar { display: flex; align-items: center; background: #F2F2F3; border-bottom: 1px solid #C9CCCF; }
+.tb { display: grid; place-items: center; flex-shrink: 0; color: #2B2B2B; border-radius: 6px; }
+.tb:hover { background: var(--borders); }
+.tb-sep { width: 1px; align-self: stretch; background: #D2D5D8; margin: 7px 4px; flex-shrink: 0; }
+.pg { display: flex; align-items: center; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.pg input { border: 1px solid #A7ABAE; border-radius: 6px; text-align: right; font: inherit; font-variant-numeric: tabular-nums; background: #fff; }
+/* mobile toolbar */
+.bar-m { gap: 2px; padding: 6px 6px; overflow-x: auto; scrollbar-width: none; }
+.bar-m .tb { width: 34px; height: 38px; }
+.bar-m .tb svg { width: 21px; height: 21px; }
+.bar-m .pg { gap: 12px; margin: 0 6px; }
+.bar-m .pg input { width: 64px; height: 36px; padding: 0 10px; }
+.bar-m .spacer { flex: 1; min-width: 8px; }
+/* desktop toolbar (laid out like the browser's built-in PDF bar) */
+.bar-d { display: none; height: 48px; padding: 0 10px; font-size: 15px; color: #3B3B3B; background: #F7F7F8; overflow-x: auto; scrollbar-width: none; }
+.bar-d .tb { height: 38px; min-width: 38px; padding: 0 8px; gap: 6px; display: inline-flex; align-items: center; justify-content: center; }
+.bar-d .tb svg { width: 20px; height: 20px; }
+.bar-d .tb .caret { width: 12px; height: 12px; color: #888; }
+.bar-d .tb-sep { margin: 10px 5px; }
+.bar-d .grp { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.bar-d .mid { margin: 0 auto; padding-inline: 12px; }
+.bar-d .pg { gap: 8px; }
+.bar-d .pg input { width: 44px; height: 32px; border-radius: 4px; padding: 0 6px; text-align: center; font-size: 15px; }
+.bar-d .zoom { width: 50px; text-align: center; }
+/* narrower viewer (e.g. doc info open): drop the least-used tools in steps.
+   Print/Save also live in the Actions menu, so they can go at the narrowest step. */
+.viewer { container-type: inline-size; }
+@container (max-width: 880px) {
+  .bar-d .opt, .bar-d .lbl, .bar-d .caret, .bar-d .zoom { display: none; }
+}
+@container (max-width: 600px) {
+  .bar-d .opt2 { display: none; }
+  .bar-d .mid { padding-inline: 8px; }
+}
+.pages { padding: 16px 14px 24px; display: grid; grid-auto-rows: max-content; gap: 16px; justify-items: center; overflow-x: auto; }
+.page {
+  width: calc(100% * var(--z, 1)); max-width: calc(820px * var(--z, 1)); aspect-ratio: 8.5 / 11; background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .15); position: relative; overflow: hidden; flex-shrink: 0;
+}
+.page canvas { display: block; width: 100%; height: 100%; }
+.page:not(.rendered)::after { content: "Page " attr(data-page); position: absolute; inset: 0; display: grid; place-items: center; color: #9AA0A5; font-size: 14px; }
+.pdf-status { color: var(--subheadings); padding: 40px 16px; text-align: center; }
+
+/* Doc info panel (shared DOM; positioned per breakpoint) */
+.info { background: #fff; display: flex; flex-direction: column; min-height: 0; }
+.info-head { display: flex; align-items: center; gap: 14px; padding: 16px 16px 14px; border-bottom: 1px solid var(--borders); }
+.info-head > svg { width: 32px; height: 32px; color: var(--eifu-teal); flex-shrink: 0; }
+.info-head h2 { margin: 0; font-size: 24px; flex: 1; }
+.close { display: flex; align-items: center; gap: 8px; color: var(--eifu-teal); font-weight: 700; font-size: 18px; padding: 6px 4px; }
+.close svg { width: 18px; height: 18px; }
+.tabs { display: flex; gap: 40px; padding: 0 16px; border-bottom: 1px solid var(--borders); background: #fff; }
+.tabs button { padding: 12px 0 10px; font-size: 18px; font-weight: 700; color: var(--subheadings); border-bottom: 3px solid transparent; }
+.tabs button[aria-current="true"] { color: var(--text); border-color: var(--eifu-teal); }
+.tabs button:hover { color: var(--text); }
+.info-body { padding: 4px 16px 24px; min-height: 0; flex: 1; position: relative; }
+.info-body section { scroll-margin-top: 4px; }
+.info-body h3 { font-size: 18px; margin: 20px 0 8px; display: flex; align-items: center; gap: 10px; }
+.info-body .txt { margin: 0; color: #4A5157; font-size: 17px; line-height: 1.45; max-width: 60ch; }
+.ov { display: flex; flex-direction: column; }
+.ov-summary { order: -1; }       /* mobile leads with the summary */
+.ov-enterprise { display: none; }
+.select { position: relative; }
+.select-btn {
+  width: 100%; height: 50px; display: flex; align-items: center; gap: 12px; border: 1px solid #9AA4AB; border-radius: 6px;
+  padding: 0 16px; font-size: 17px; background: #fff; color: var(--text); text-align: left;
+}
+.select-btn:hover { border-color: var(--eifu-teal); }
+.select-btn span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.select-btn svg { width: 18px; height: 18px; color: var(--eifu-teal); flex-shrink: 0; transition: rotate .15s; }
+.select-btn[aria-expanded="true"] svg { rotate: 180deg; }
+/* list is pinned to the field's width */
+.select-list {
+  position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 10; margin: 0; padding: 4px 0; list-style: none;
+  background: #fff; border: 1px solid var(--borders); border-radius: 6px; box-shadow: var(--shadow); max-height: 240px; overflow-y: auto;
+}
+.select-list li { padding: 10px 16px; font-size: 16px; cursor: pointer; overflow-wrap: anywhere; }
+.select-list li:hover, .select-list li.active { background: #EEF3F6; }
+.select-list li[aria-selected="true"] { font-weight: 700; color: var(--eifu-teal); }
+.info .qr { width: 120px; height: 120px; margin: 8px 0 4px 16px; display: block; }
+.info .qr-dl { width: 120px; margin: 6px 0 4px 16px; font-size: 16px; text-align: center; }
+.meta-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.meta-table th, .meta-table td { padding: 9px 0; border-bottom: 1px solid var(--borders); vertical-align: top; }
+.meta-table th { text-align: left; font-weight: 500; color: var(--subheadings); padding-right: 16px; white-space: nowrap; }
+.meta-table td { text-align: right; overflow-wrap: anywhere; }
+.meta-table a { color: var(--eifu-teal); }
+.meta-table tr:first-child th, .meta-table tr:first-child td { border-top: 1px solid var(--borders); }
+.outline-btn { margin-top: 12px; border: 1px solid var(--eifu-teal); color: var(--eifu-teal); font-weight: 700; font-size: 16px; border-radius: 4px; padding: 9px 12px; }
+.outline-btn:hover { background: #EEF3F6; }
+.count { background: var(--borders); color: var(--text); font-size: 14px; font-weight: 700; border-radius: 10px; padding: 1px 9px; font-variant-numeric: tabular-nums; }
+.acc { border-bottom: 1px solid var(--borders); }
+.acc > button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 16px 0 14px; font-size: 18px; font-weight: 700; text-align: left; }
+.acc > button .chev { margin-left: auto; width: 18px; height: 18px; color: var(--eifu-teal); transition: rotate .15s; }
+.acc > button[aria-expanded="true"] .chev { rotate: 180deg; }
+.acc .acc-body { padding-bottom: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--hover-state); color: var(--subheadings); border-radius: 10px; padding: 2px 8px; font-size: 14px; }
+.codes { display: flex; flex-wrap: wrap; gap: 6px; }
+.codes button {
+  font: 14px/1.4 ui-monospace, Consolas, monospace; color: #3B4248; text-align: left; padding: 5px 8px; border-radius: 4px;
+  background: transparent; display: inline-flex; align-items: center; gap: 8px;
+  transition: background-color .12s;
+}
+.codes button svg { width: 14px; height: 14px; color: var(--eifu-teal); opacity: 0; transition: opacity .12s; flex-shrink: 0; }
+.codes button:hover, .codes button:focus-visible { background: #DCE3E8; color: var(--text); }
+.codes button:hover svg, .codes button:focus-visible svg { opacity: 1; }
+.codes button.copied { background: var(--eifu-teal); color: #fff; }
+.codes button.copied svg { opacity: 1; color: #fff; }
+.notice { border: 1px solid var(--borders); border-radius: 4px; padding: 12px; font-size: 14px; line-height: 1.35; white-space: pre-line; margin-top: 8px; }
+.legal { display: block; width: 100%; text-align: center; border: 1px solid var(--borders); border-radius: 4px; padding: 6px; margin-top: 8px; font-size: 14px; text-decoration: underline; color: var(--text); }
+.watermark { display: block; width: 150px; aspect-ratio: 1; margin-bottom: 6px; background: linear-gradient(180deg, #4b5d73 0%, #c98b5a 45%, #f2c47a 52%, #3a4350 60%, #7d8a96 100%); border-radius: 2px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 80;
+  background: #22313B; color: #fff; padding: 12px 8px; border-radius: 8px; font-size: 14px; font-weight: 500; line-height: 1.3; box-shadow: var(--shadow);
+  max-width: calc(100% - 32px);
+}
+
+/* ---------- Ratings + related (from Figma "new SST themes" 214:3380) ---------- */
+.below { display: grid; gap: 34px; padding-bottom: 48px; font-family: "Inter", var(--font-ui); color: #000; }
+/* ratings sized up 25% from the Figma spec */
+.ratings { padding: 12.5px 0; max-width: 668px; font-family: Arial, var(--font-ui); font-size: 17.5px; }
+.rating-head { display: flex; align-items: center; gap: 17.5px; flex-wrap: wrap; }
+.rating-toggle { display: flex; align-items: center; gap: 7.5px; font-size: 19px; }
+.rating-toggle .chev { width: 22.5px; height: 22.5px; transition: rotate .15s; }
+.rating-toggle[aria-expanded="false"] .chev { rotate: -90deg; }
+.stars { display: inline-flex; gap: 2.5px; vertical-align: middle; }
+.stars svg { width: 25px; height: 25px; display: block; }
+.star-path { fill: none; stroke: #9C9C9C; stroke-width: 1.3; stroke-linejoin: round; }
+.on .star-path { fill: #F2B01E; stroke: #D99A0B; }
+.star-btn { padding: 1.25px; border-radius: 4px; }
+.score { margin-left: 5px; font-size: 16px; font-variant-numeric: tabular-nums; }
+/* average stars + score read as one unit and never split across lines */
+.avg { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.avg .score { margin-left: 0; }
+@media (max-width: 419.98px) {
+  .rating-head { gap: 12px; }
+  .avg .stars svg { width: 20px; height: 20px; }
+}
+.submit-ratings { margin-top: 15px; border: 1px solid #4F7590; border-radius: 5px; padding: 7.5px 15px; font-size: 19px; background: #fff; }
+.submit-ratings:hover:not(:disabled) { background: #EEF3F6; }
+.submit-ratings:disabled { color: #8A8F94; border-color: #C9CCCF; cursor: default; }
+.categories h3 { font-size: 17.5px; margin: 10px 0 5px; }
+.categories dl { margin: 0; display: grid; grid-template-columns: max-content auto; align-items: center; column-gap: 10px; row-gap: 2.5px; }
+.categories dt { font-size: 16px; }
+.categories dd { margin: 0; display: flex; align-items: center; }
+
+.related { padding: 10px 0; display: grid; gap: 24px; min-width: 0; }
+.related-head { display: grid; gap: 20px; }
+.related-head h2 { margin: 0; font-size: 28px; font-weight: 700; line-height: normal; }
+.related-head img { display: block; width: 100%; height: 2px; }
+.cards {
+  display: flex; gap: 20px; overflow-x: auto; overflow-y: clip; padding: 4px 0 14px;
+  scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: #C7C7C7 transparent;
+}
+.doc-card { width: 152px; flex-shrink: 0; display: flex; flex-direction: column; border-radius: 5px; overflow: clip; scroll-snap-align: start; transition: translate .15s; }
+.doc-card:hover { translate: 0 -3px; }
+.doc-card .open { display: block; width: 100%; aspect-ratio: 244 / 351; }
+.doc-card .open img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.doc-card .card-body { border: 1px solid #000; border-radius: 0 0 10px 10px; padding: 10px; display: grid; gap: 5px; background: #fff; }
+.doc-card .crumb { font-size: 12.5px; color: #343434; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc-card .title { font-size: 17.5px; color: #343434; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0; font-weight: 400; }
+.card-actions { display: flex; justify-content: space-between; align-items: center; }
+.card-actions button { width: 30px; height: 30px; border-radius: 5px; display: grid; place-items: center; color: #202020; }
+.card-actions button:hover { background: var(--borders); }
+.card-actions svg { width: 22px; height: 22px; }
+.card-actions .fav { color: var(--eifu-teal); }
+
+/* ---------- Footer (Figma 14:356) ---------- */
+.site-footer { border-top: 1px solid #A7ABAE; font-family: "Inter", var(--font-ui); }
+.site-footer .wrap { padding-block: 32px 40px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 28px; }
+.foot-col { display: flex; flex-direction: column; gap: 8px; }
+.foot-col + .foot-col { border-left: 1px solid rgba(0, 0, 0, .5); padding-left: 32px; }
+.foot-col h2 { margin: 0; font-size: 22px; font-weight: 400; line-height: normal; color: #000; }
+.foot-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.foot-col a { font-size: 14px; color: var(--eifu-teal); text-decoration: none; line-height: normal; }
+.foot-col a:hover { text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 1279.98px) {
+  .site-footer .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .foot-col:nth-child(odd) { border-left: 0; padding-left: 0; }
+}
+@media (max-width: 599.98px) {
+  .site-footer .wrap { grid-template-columns: 1fr; row-gap: 0; }
+  .foot-col, .foot-col:nth-child(even) { border-left: 0; padding: 16px 0; }
+  .foot-col + .foot-col { border-top: 1px solid rgba(0, 0, 0, .2); }
+}
+
+/* ---------- Mobile (dev_mobile_*): viewer runs edge to edge; doc info is a bottom sheet ---------- */
+@media (max-width: 899.98px) {
+  .stage { gap: 0; margin-inline: calc(-1 * max(var(--gutter), env(safe-area-inset-left, 0px))); }
+  .viewer { border-bottom: 1px solid #B9BDC0; }
+  /* viewer scrolls on its own, capped at 1.5 pages tall, so the page below stays reachable */
+  .pages { max-height: var(--max-h, 75dvh); overflow-y: auto; }
+  /* sheet sits over everything, max 75% of the screen, scrolls inside; the page behind stays scrollable */
+  .info {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-height: 75dvh;
+    border-radius: 16px 16px 0 0; box-shadow: 0 -8px 28px rgba(26, 26, 26, .18);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
+    animation: sheet .24s cubic-bezier(.2, .8, .2, 1);
+  }
+  .info::before { content: ""; width: 40px; height: 4px; border-radius: 2px; background: #C5CBD0; margin: 8px auto -6px; flex-shrink: 0; }
+  .info-head { padding-inline: 16px 14px; }
+  .info-body { padding-inline: 16px; overflow-y: auto; overscroll-behavior: contain; }
+  /* room under the page so its end can scroll above the sheet */
+  body.sheet-open { padding-bottom: var(--sheet-h, 75dvh); }
+}
+@keyframes sheet { from { transform: translateY(100%); } }
+
+/* ---------- Viewer full screen: native (:fullscreen) or, where unsupported (iPhone), fills the window (.fs) ---------- */
+.viewer:fullscreen { display: flex; flex-direction: column; width: 100%; height: 100%; border: 0; background: var(--viewer-bg); }
+.viewer.fs {
+  position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; height: 100dvh; border: 0; margin: 0;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.viewer:fullscreen .pages { flex: 1; max-height: none; overflow: auto; }
+.viewer.fs .pages { flex: 1; max-height: none; overflow: auto; }
+html.fs-lock { overflow: hidden; }
+@media (max-width: 419.98px) {
+  .doc-head h1 { font-size: 20px; }
+  .doc-head .meta { font-size: 13px; }
+  .doc-actions { gap: 0; margin-right: -4px; }
+  .icon-btn { width: 32px; height: 36px; border-radius: 6px; }
+  .icon-btn svg { width: 26px; height: 26px; }
+  .icon-btn.kebab svg { width: 22px; height: 22px; }
+  .bar-m { gap: 0; padding-inline: 2px; }
+  .bar-m .tb { width: 27px; }
+  .bar-m .pg { gap: 8px; margin: 0 4px; }
+  .bar-m .pg input { width: 50px; }
+}
+
+/* ---------- Desktop (dev_desktop_*) ---------- */
+@media (min-width: 900px) {
+  :root { --gutter: clamp(32px, 3.4vw, 64px); }
+  .logo img { height: 68px; }
+  .search { margin-top: 28px; }
+  .search form { grid-template-columns: 1fr 1fr; column-gap: 16px; padding: 26px 30px 28px; box-shadow: 0 2px 12px rgba(0, 0, 0, .12); border-color: #E2E4E6; }
+  .search label { font-size: 24px; }
+  .search input { height: 36px; border-radius: 6px; }
+  .search .go { grid-column: 1 / -1; width: 100%; height: 40px; display: flex; gap: 10px; justify-content: center; color: #6A6E72; font-size: 21px; background: #DADBDC; border-radius: 4px; }
+  .search .go span { display: inline; }
+  .crumbs { margin-top: 28px; }
+  .crumbs .short { display: none; }
+  .crumbs .full { display: block; font-size: 20px; }
+  .crumbs .back { display: inline-flex; align-items: center; gap: 18px; margin-top: 14px; font-size: 20px; color: var(--text); text-decoration: none; }
+  .back svg { width: 28px; height: 28px; }
+  .doc-head { display: flex; justify-content: space-between; align-items: flex-start; border-top: 1px solid #9DA2A6; border-bottom: 1px solid #9DA2A6; margin-top: 12px; padding: 14px 30px 10px; }
+  .doc-head .ttl { display: block; }
+  .doc-head h1 { font-size: 44px; font-weight: 400; }
+  .doc-head .meta { font-size: 20px; margin-top: 0; }
+  .doc-actions { margin-top: 10px; gap: 6px; }
+  .icon-btn { width: 54px; height: 54px; }
+  .icon-btn svg { width: 44px; height: 44px; }
+  .icon-btn.kebab svg { width: 40px; height: 40px; }
+  .menu { min-width: 0; padding: 4px 0; }
+  .menu button { font-size: 20px; padding: 10px 14px; gap: 12px; white-space: nowrap; }
+  .menu svg { width: 26px; height: 26px; }
+  .qr-pop { padding: 20px 22px 14px; }
+  .qr-pop .qr { width: 146px; height: 146px; }
+  .qr-pop .link-btn { font-size: 20px; }
+  .scrim { display: none; }
+  .bar-m { display: none; }
+  .bar-d { display: flex; }
+  .stage { margin-top: 30px; transition: grid-template-columns .25s; }
+  .stage.with-info { grid-template-columns: minmax(0, 1.6fr) minmax(380px, 1fr); }
+  .viewer { border: 0; height: min(84dvh, 1300px); display: flex; flex-direction: column; position: sticky; top: 16px; background: #E6E6E6; }
+  .pages { overflow: auto; flex: 1; padding: 0 0 24px; }
+  .page { width: calc(70% * var(--z, 1)); max-width: none; box-shadow: none; }
+  .info {
+    position: sticky; top: 16px; max-height: min(84dvh, 1300px); border: 1px solid var(--borders); border-radius: 10px;
+    animation: slide .22s ease-out;
+  }
+  .info:not([hidden]) { display: flex; }
+  .info-head, .tabs { margin: 0 22px; padding-inline: 0; }
+  .info-head { padding-top: 18px; }
+  .info-head > svg { width: 36px; height: 36px; }
+  .info-head h2 { font-size: 26px; }
+  .tabs { gap: 28px; }
+  .info-body { overflow-y: auto; overscroll-behavior: contain; padding: 4px 22px 24px; }
+  .info-body section { scroll-margin-top: 4px; }
+  .ov-summary { order: 0; }
+  .ov-enterprise { display: block; }
+  .select-btn { height: 46px; }
+  .info .qr { width: 120px; height: 120px; }
+}
+@keyframes slide { from { opacity: 0; transform: translateX(24px); } }
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- icons from assets/icon-*.svg, recolored to currentColor -->
+  <symbol id="i-info" viewBox="0 0 32 32" fill="currentColor"><path d="M30 16c0-7.732-6.268-14-14-14S2 8.268 2 16s6.268 14 14 14v2C7.163 32 0 24.837 0 16S7.163 0 16 0s16 7.163 16 16-7.163 16-16 16v-2c7.732 0 14-6.268 14-14"/><path d="M21 26h-1.727q-.669 0-1.337-.112a5 5 0 0 1-1.254-.392 4.6 4.6 0 0 1-1.086-.784 4.4 4.4 0 0 1-.78-1.064 5 5 0 0 1-.39-1.288 8 8 0 0 1-.11-1.344v-6.888H11V11.44h6.435v9.576q0 .42.083.84.084.42.307.784.25.336.64.504t.808.168H21zM15.875 9.48a2.9 2.9 0 0 1-.892-.14 1.9 1.9 0 0 1-.752-.448 1.8 1.8 0 0 1-.446-.756 3 3 0 0 1-.139-.896q0-.448.14-.896.138-.448.445-.756.307-.307.752-.448.446-.14.892-.14.445 0 .891.14t.752.448.446.756.14.896-.14.896-.446.756-.752.448-.891.14"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 32 32" fill="currentColor"><path d="M3.556 21.333v3.556H0v-3.556zM0 32h3.556v-3.556H0zm3.556-7.111v3.555h3.555v-3.555zm7.11-10.667H7.112v3.556H3.556v3.555h7.11zM0 14.222v3.556h3.556v-3.556zm10.667 14.222H7.11V32H16v-3.556h-1.778v-3.555h-3.555zM17.778 1.778h-3.556v3.555h3.556zm-3.556 12.444h3.556V8.89h-3.556zM1.778 10.667A1.78 1.78 0 0 1 0 8.889V1.778A1.78 1.78 0 0 1 1.778 0h7.11a1.78 1.78 0 0 1 1.779 1.778v7.11a1.78 1.78 0 0 1-1.778 1.779zm1.778-3.556h3.555V3.556H3.556zM32 1.778V16h-3.556v-5.333h-5.333a1.78 1.78 0 0 1-1.778-1.778V1.778A1.78 1.78 0 0 1 23.111 0h7.111A1.78 1.78 0 0 1 32 1.778m-3.556 1.778h-3.555V7.11h3.555zM32 23.11v7.111A1.78 1.78 0 0 1 30.222 32h-7.11a1.78 1.78 0 0 1-1.779-1.778v-5.333h-7.11v-7.111h3.555v3.555h1.778v-7.11h3.555v7.11h7.111A1.78 1.78 0 0 1 32 23.111m-3.556 1.778h-3.555v3.555h3.555z"/></symbol>
+  <symbol id="i-kebab" viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="4" r="4"/><circle cx="16" cy="16" r="4"/><circle cx="16" cy="28" r="4"/></symbol>
+  <!-- assets/icon-lineheart.svg and icon-filledheart.svg -->
+  <symbol id="i-heart" viewBox="0 0 32 32" fill="currentColor"><path fill-rule="evenodd" d="M17.6638 3.05087C24.7223 -2.87186 35.0752 5.0893 31.1304 13.5361C30.8335 14.1717 30.5096 14.7671 30.1551 15.296C25.7145 21.9209 16.8454 30.2092 16.7823 30.2683C16.3423 30.6798 15.6581 30.6806 15.2178 30.2694L15.2156 30.2672C15.2156 30.2672 15.2133 30.2637 15.2111 30.2616L15.191 30.2427C15.1735 30.2263 15.1476 30.2022 15.114 30.1706C15.0469 30.1073 14.9481 30.0146 14.8216 29.8941C14.5687 29.6529 14.2032 29.3014 13.7515 28.8603C12.8485 27.9784 11.5985 26.7349 10.2108 25.2849C7.44743 22.3976 4.08997 18.6453 1.84496 15.296C1.49037 14.767 1.16659 14.1718 0.869675 13.5361C-3.0753 5.08927 7.27762 -2.87271 14.3362 3.05087C14.9166 3.53797 15.5334 4.22642 16 4.78083C16.4886 4.2009 17.1027 3.52188 17.6638 3.05087ZM19.1379 4.7886C24.1746 0.562852 31.7699 6.07787 29.1887 12.2825L29.0582 12.5778C28.7976 13.1358 28.5283 13.6237 28.2536 14.0335C24.7379 19.2787 18.2386 25.7023 15.9978 27.861C15.8113 27.6813 15.594 27.4736 15.3528 27.2381C14.4637 26.3697 13.232 25.1436 11.8657 23.716C9.12076 20.8479 5.87691 17.212 3.74644 14.0335C3.54045 13.7262 3.33777 13.375 3.13939 12.9831L2.94188 12.5778C-0.0112717 6.25466 7.74578 0.495477 12.8621 4.7886C13.3104 5.16476 13.8574 5.77056 14.3184 6.32313C14.5423 6.59158 14.7343 6.83437 14.8707 7.00934C14.9388 7.09666 14.9929 7.16707 15.0292 7.21476C15.0473 7.23849 15.0615 7.25618 15.0705 7.26806L15.0805 7.28138L15.0828 7.28471C15.54 7.89817 16.4591 7.89855 16.9173 7.28582C16.9626 7.22522 18.2081 5.56889 19.1379 4.7886Z"/></symbol>
+  <symbol id="i-heart-fill" viewBox="0 0 32 32" fill="currentColor"><path d="M17.6638 3.05087C24.7223 -2.87186 35.0752 5.0893 31.1304 13.5361C30.8335 14.1717 30.5096 14.7671 30.1551 15.296C25.7145 21.9209 16.8454 30.2092 16.7823 30.2683C16.3423 30.6798 15.6581 30.6806 15.2178 30.2694L15.2156 30.2672C15.2156 30.2672 15.2133 30.2637 15.2111 30.2616L15.191 30.2427C15.1735 30.2263 15.1476 30.2022 15.114 30.1706C15.0469 30.1073 14.9481 30.0146 14.8216 29.8941C14.5687 29.6529 14.2032 29.3014 13.7515 28.8603C12.8485 27.9784 11.5985 26.7349 10.2108 25.2849C7.44743 22.3976 4.08997 18.6453 1.84496 15.296C1.49037 14.767 1.16659 14.1718 0.869675 13.5361C-3.0753 5.08927 7.27762 -2.87271 14.3362 3.05087C14.9166 3.53797 15.5334 4.22642 16 4.78083C16.4886 4.2009 17.1027 3.52188 17.6638 3.05087Z"/></symbol>
+  <symbol id="i-print" viewBox="0 0 32 32" fill="currentColor"><path d="M28 11a1 1 0 1 1 0 2h-3a1 1 0 1 1 0-2z"/><path fill-rule="evenodd" d="M22.305 2a2.67 2.67 0 0 1 2.67 2.67v3.38h4.388a2.67 2.67 0 0 1 2.67 2.67v12.577a2.67 2.67 0 0 1-2.67 2.669h-4.388v1.364A2.67 2.67 0 0 1 22.305 30H9.73a2.67 2.67 0 0 1-2.67-2.67v-1.364H2.67A2.67 2.67 0 0 1 0 23.297V10.72a2.67 2.67 0 0 1 2.67-2.67h4.39V4.67A2.67 2.67 0 0 1 9.729 2zM9.73 22.08c-.492 0-.73.25-.73.742v4.508c0 .491.238.67.73.67h12.575c.491 0 .695-.179.695-.67v-4.508c0-.491-.204-.742-.695-.742zM2.5 10c-.491 0-.411.23-.411.72v12.577c0 .491.09.703.58.703h4.39v-1.178C7.06 21.348 8.255 20 9.73 20h12.575c1.474 0 2.67 1.348 2.67 2.822V24h4.388c.492 0 .637-.212.637-.703V10.72c0-.49-.314-.72-.806-.72zm7.23-6C9.237 4 9 4.179 9 4.67v3.38h14V4.67c0-.491-.204-.67-.695-.67z"/></symbol>
+  <symbol id="i-download" viewBox="0 0 32 32" fill="currentColor"><path d="M16.8 0v10.105h-1.6V0z"/><path d="m16 16-5.542-6.316h11.085z"/><path d="M30.4 30.316V32H1.6v-1.684zm0-10.106H1.6V32A1.67 1.67 0 0 1 0 30.316V20.21c0-.93.716-1.684 1.6-1.684h28.8c.884 0 1.6.754 1.6 1.684v10.106c0 .93-.716 1.684-1.6 1.684z"/><path d="M25.6 21.895c0-.466.359-.843.8-.843H28c.442 0 .8.377.8.843 0 .465-.358.842-.8.842h-1.6c-.441 0-.8-.377-.8-.842"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 32 32" fill="currentColor"><path d="M29.209 25.434v1.383H2.767v-1.383zm1.383-1.384V8.267c0-.764-.62-1.384-1.383-1.384H2.767c-.764 0-1.384.62-1.384 1.384V24.05c0 .764.62 1.384 1.384 1.384v1.383A2.77 2.77 0 0 1 0 24.05V8.267A2.77 2.77 0 0 1 2.767 5.5h26.442a2.77 2.77 0 0 1 2.767 2.767V24.05a2.77 2.77 0 0 1-2.767 2.767v-1.383c.764 0 1.383-.62 1.383-1.384"/><path d="M16.886 19.182a1.39 1.39 0 0 1-1.772 0L1.5 7.926C.538 7.13 1.057 5.6 2.267 5.505l.119-.005h27.228l.119.005c1.17.091 1.695 1.528.856 2.342l-.089.079zm12.728-12.31H2.386L16 18.128z"/><path d="m1.433 25.929-1.002-.954 12.704-8.17 1.002.954zM30.488 25.617l1.002-.954-12.218-7.858-1.003.954z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 32 32" fill="currentColor"><path d="M15.943 0c1.404 0 2.547.776 2.584 1.742h2.024c.248 0 .449.173.449.387V3h5a2 2 0 0 1 2 2v25a2 2 0 0 1-1.796 1.99L26 32H6l-.204-.01A2 2 0 0 1 4 30v-4a1 1 0 1 1 2 0v4h20V5h-5v.613c0 .214-.201.387-.449.387h-9.102c-.248 0-.449-.173-.449-.387V5H6v13a1 1 0 1 1-2 0V5a2 2 0 0 1 2-2h5v-.871c0-.214.201-.387.449-.387h1.911C13.397.776 14.54 0 15.943 0M8.276 17.296a1 1 0 0 1 1.355-.07l.076.07 3.997 3.99.07.076a1 1 0 0 1-.07 1.352l-3.997 3.99-.076.07a1 1 0 0 1-1.355-.07 1 1 0 0 1-.07-1.352l.07-.076 2.257-2.252H.999C.447 23.024 0 22.565 0 22s.447-1.023.999-1.023h9.534l-2.257-2.253-.07-.076a1 1 0 0 1 .07-1.352"/></symbol>
+  <!-- UI glyphs -->
+  <symbol id="i-x" viewBox="0 0 20 20"><path d="m4 4 12 12M16 4 4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 20 20"><path d="m5 8 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></symbol>
+  <symbol id="i-side" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M5.5 8h1.5M5.5 11h1.5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 6h12M9 12h12M9 18h12M4 6h1M4 12h1M4 18h1"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-hl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m14 4 6 6-9 9H5v-6z"/><path d="M4 21h16"/></symbol>
+  <symbol id="i-marker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h12v6l-3 4v4l-6 3v-7L6 9z"/></symbol>
+  <symbol id="i-draw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 4h18l-9 16z"/><path d="M8 10h8"/></symbol>
+  <symbol id="i-erase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m14 4 6 6-9 9H6l-3-3z"/><path d="m9 9 6 6M11 20h10"/></symbol>
+  <symbol id="i-textbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 8h8M12 8v9"/></symbol>
+  <symbol id="i-read" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 19 5-14 5 14M5 14h6M16 6c1.5 1 1.5 4 0 5M19 4c3 2 3 7 0 9"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5h14M12 5v15"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M16 4l4 4L8 20H4v-4z"/></symbol>
+  <symbol id="i-img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m5 17 5-5 3 3 2-2 4 4"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 7 5 5-5 5M13 7l5 5-5 5"/></symbol>
+  <symbol id="i-fit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M7 9v6m10-6v6"/></symbol>
+  <symbol id="i-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 12a7 7 0 1 1-2.1-5"/><path d="M19 4v4h-4"/></symbol>
+  <symbol id="i-twopage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5h8v14H3zM13 5h8v14h-8z"/></symbol>
+  <symbol id="i-printer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5l2 2.6 3.2-.6.6 3.2 2.7 1.9-1.6 2.9 1.6 2.9-2.7 1.9-.6 3.2-3.2-.6-2 2.6-2-2.6-3.2.6-.6-3.2-2.7-1.9L4.6 12 3 9.1l2.7-1.9.6-3.2 3.2.6z"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></symbol>
+  <symbol id="i-collapse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5m6-7-7 7 7 7"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="eIFU home">
+      <img src="assets/eIFU logo.png" alt="eIFU" width="198" height="100">
+    </a>
+    <button class="burger" aria-label="Open site menu">
+      <svg viewBox="0 0 40 26" aria-hidden="true"><path d="M1 2h38M1 13h38M1 24h38" stroke="var(--eifu-teal)" stroke-width="2.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="search wrap" aria-label="Search documents">
+    <form id="search-form">
+      <label>Search Criteria 1 <input id="q1" type="text"></label>
+      <label>Search Criteria 2 <input id="q2" type="text"></label>
+      <button class="go" type="submit" aria-label="Search"><svg aria-hidden="true"><use href="#i-search"/></svg><span>Search</span></button>
+    </form>
+  </section>
+
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a class="short" href="#">‹ Documents</a>
+      <div class="full">Breadcrumb &gt; Breadcrumb &gt; Breadcrumb &gt; Documents</div>
+      <a class="back" href="#"><svg aria-hidden="true"><use href="#i-arrow"/></svg>Back to Search</a>
+    </nav>
+
+    <div class="doc-head">
+      <div class="ttl">
+        <h1>eIFU Comprehensive Guide</h1>
+        <div class="meta">PDF · 29 pages · 319 KB · Version 1 · Released 12/19/2025</div>
+      </div>
+      <div class="doc-actions">
+        <button class="icon-btn" id="btn-info" aria-expanded="false" aria-controls="info" aria-label="Document Information" data-tip="Document Information"><svg aria-hidden="true"><use href="#i-info"/></svg></button>
+        <button class="icon-btn" id="btn-qr" aria-expanded="false" aria-controls="pop-qr" aria-haspopup="dialog" aria-label="QR Code" data-tip="QR Code"><svg aria-hidden="true"><use href="#i-qr"/></svg></button>
+        <button class="icon-btn kebab" id="btn-actions" aria-expanded="false" aria-controls="pop-actions" aria-haspopup="menu" aria-label="Actions" data-tip="Actions"><svg aria-hidden="true"><use href="#i-kebab"/></svg></button>
+
+        <div class="popover qr-pop" id="pop-qr" role="dialog" aria-label="Document QR code" hidden>
+          <svg class="qr" viewBox="0 0 29 29" role="img" aria-label="QR code linking to this document"></svg>
+          <button class="link-btn" data-toast="QR code saved as eIFU-Comprehensive-Guide-QR.png">Download PNG</button>
+        </div>
+
+        <div class="popover menu-actions" id="pop-actions" hidden>
+          <ul class="menu" role="menu" aria-label="Document actions">
+            <li role="none"><button role="menuitem" id="fav" aria-pressed="false"><svg class="heart" aria-hidden="true"><use class="off" href="#i-heart"/><use class="on" href="#i-heart-fill"/></svg><span>Add to favorites</span></button></li>
+            <li role="none"><button role="menuitem" data-toast="Opening print dialog…"><svg aria-hidden="true"><use href="#i-print"/></svg>Print</button></li>
+            <li role="none"><button role="menuitem" data-toast="Downloading eIFU Comprehensive Guide.pdf (319 KB)"><svg aria-hidden="true"><use href="#i-download"/></svg>Download</button></li>
+            <li role="none"><button role="menuitem" data-toast="Opening your email app…"><svg aria-hidden="true"><use href="#i-mail"/></svg>Email document</button></li>
+            <li role="none"><button role="menuitem" id="copy-link"><svg aria-hidden="true"><use href="#i-copy"/></svg>Copy link</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <section class="viewer" id="viewer" aria-label="Document viewer">
+        <div class="pdf-bar bar-m" role="toolbar" aria-label="PDF tools">
+          <button class="tb" aria-label="Toggle thumbnails"><svg aria-hidden="true"><use href="#i-side"/></svg></button>
+          <button class="tb" aria-label="Find in document"><svg aria-hidden="true"><use href="#i-search"/></svg></button>
+          <div class="pg"><input class="js-page" inputmode="numeric" value="1" aria-label="Page"><span class="js-total">of 29</span></div>
+          <span class="spacer"></span>
+          <button class="tb js-zoom-out" aria-label="Zoom out"><svg aria-hidden="true"><use href="#i-minus"/></svg></button>
+          <button class="tb js-zoom-in" aria-label="Zoom in"><svg aria-hidden="true"><use href="#i-plus"/></svg></button>
+          <button class="tb" aria-label="Highlight"><svg aria-hidden="true"><use href="#i-hl"/></svg></button>
+          <button class="tb" aria-label="Add text"><svg aria-hidden="true"><use href="#i-text"/></svg></button>
+          <button class="tb" aria-label="Draw"><svg aria-hidden="true"><use href="#i-pen"/></svg></button>
+          <button class="tb" aria-label="Add image"><svg aria-hidden="true"><use href="#i-img"/></svg></button>
+          <button class="tb js-fs" aria-label="Full screen" aria-pressed="false"><svg aria-hidden="true"><use href="#i-expand"/></svg></button>
+          <button class="tb" aria-label="More tools"><svg aria-hidden="true"><use href="#i-more"/></svg></button>
+        </div>
+        <div class="pdf-bar bar-d" role="toolbar" aria-label="PDF tools">
+          <div class="grp">
+            <button class="tb" aria-label="Contents"><svg aria-hidden="true"><use href="#i-list"/></svg></button>
+            <span class="tb-sep opt2"></span>
+            <button class="tb opt2" aria-label="Highlight"><svg aria-hidden="true"><use href="#i-marker"/></svg><svg class="caret" aria-hidden="true"><use href="#i-chev"/></svg></button>
+            <button class="tb opt2" aria-label="Draw"><svg aria-hidden="true"><use href="#i-draw"/></svg><span class="lbl" aria-hidden="true">Draw</span><svg class="caret" aria-hidden="true"><use href="#i-chev"/></svg></button>
+            <button class="tb opt" aria-label="Erase"><svg aria-hidden="true"><use href="#i-erase"/></svg></button>
+            <span class="tb-sep opt2"></span>
+            <button class="tb opt2" aria-label="Add text"><svg aria-hidden="true"><use href="#i-textbox"/></svg></button>
+            <span class="tb-sep opt"></span>
+            <button class="tb opt" aria-label="Read aloud"><svg aria-hidden="true"><use href="#i-read"/></svg></button>
+          </div>
+          <div class="grp mid">
+            <button class="tb js-zoom-out" aria-label="Zoom out"><svg aria-hidden="true"><use href="#i-minus"/></svg></button>
+            <span class="zoom js-zoom-label">100%</span>
+            <button class="tb js-zoom-in" aria-label="Zoom in"><svg aria-hidden="true"><use href="#i-plus"/></svg></button>
+            <button class="tb js-zoom-fit opt2" aria-label="Fit to width"><svg aria-hidden="true"><use href="#i-fit"/></svg></button>
+            <span class="tb-sep"></span>
+            <div class="pg"><input class="js-page" inputmode="numeric" value="1" aria-label="Page"><span class="js-total">of 29</span></div>
+            <span class="tb-sep opt2"></span>
+            <button class="tb opt2" aria-label="Rotate"><svg aria-hidden="true"><use href="#i-rotate"/></svg></button>
+            <button class="tb opt" aria-label="Two-page view"><svg aria-hidden="true"><use href="#i-twopage"/></svg></button>
+          </div>
+          <div class="grp">
+            <button class="tb" aria-label="Find in document"><svg aria-hidden="true"><use href="#i-search"/></svg></button>
+            <span class="tb-sep opt2"></span>
+            <button class="tb opt2" aria-label="Print" data-toast="Opening print dialog…"><svg aria-hidden="true"><use href="#i-printer"/></svg></button>
+            <button class="tb opt2" aria-label="Save" data-toast="Downloading eIFU Comprehensive Guide.pdf (319 KB)"><svg aria-hidden="true"><use href="#i-save"/></svg></button>
+            <button class="tb opt" aria-label="Viewer settings"><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
+            <span class="tb-sep"></span>
+            <button class="tb js-fs" aria-label="Full screen" aria-pressed="false"><svg aria-hidden="true"><use href="#i-expand"/></svg></button>
+          </div>
+        </div>
+        <div class="pages" id="pages" aria-busy="true"><p class="pdf-status" id="pdf-status">Loading document…</p></div>
+      </section>
+
+      <aside class="info" id="info" aria-labelledby="info-title" hidden>
+        <div class="info-head">
+          <svg aria-hidden="true"><use href="#i-info"/></svg>
+          <h2 id="info-title">Document info</h2>
+          <button class="close" id="info-close">Close <svg aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <nav class="tabs" aria-label="Jump to section">
+          <button data-target="sec-overview" aria-current="true">Overview</button>
+          <button data-target="sec-details">Details</button>
+          <button data-target="sec-notices">Notices</button>
+        </nav>
+        <div class="info-body" id="info-body">
+          <section id="sec-overview" class="ov" aria-label="Overview">
+            <div class="ov-version">
+              <h3 id="version-label">Version</h3>
+              <!-- custom listbox: a native <select> popup can render wider than its field -->
+              <div class="select" id="version">
+                <button type="button" class="select-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="version-list" aria-labelledby="version-label version-value"><span id="version-value">Version 1 · Released 12/19/2025</span><svg aria-hidden="true"><use href="#i-chev"/></svg></button>
+                <ul class="select-list" id="version-list" role="listbox" aria-labelledby="version-label" tabindex="-1" hidden>
+                  <li role="option" id="ver-1" aria-selected="true">Version 1 · Released 12/19/2025</li>
+                  <li role="option" id="ver-0-9" aria-selected="false">Draft 0.9 · Released 11/02/2025</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ov-enterprise">
+              <h3>Enterprise</h3>
+              <p class="txt">enLabel Global Services</p>
+            </div>
+            <div class="ov-summary">
+              <h3>Article Summary</h3>
+              <p class="txt">A comprehensive guide that revolves around best practices for businesses looking to implement eIFU.</p>
+            </div>
+            <div class="ov-qr">
+              <h3>QR code</h3>
+              <svg class="qr" viewBox="0 0 29 29" role="img" aria-label="QR code linking to this document"></svg>
+              <button class="link-btn qr-dl" data-toast="QR code saved as eIFU-Comprehensive-Guide-QR.png">Download PNG</button>
+            </div>
+          </section>
+
+          <section id="sec-details" aria-labelledby="h-details">
+            <h3 id="h-details">Document Metadata</h3>
+            <table class="meta-table" id="meta-table">
+              <tbody>
+                <tr><th scope="row">Enterprise</th><td>enLabel Global Services</td></tr>
+                <tr><th scope="row">File name</th><td>eifu comprehensive guide.pdf</td></tr>
+                <tr><th scope="row">File size</th><td>319.49 KB</td></tr>
+                <tr><th scope="row">Article URL</th><td><a href="#">/eIFUGuide</a></td></tr>
+                <tr><th scope="row">Metadata Field</th><td>Metadata</td></tr>
+                <tr class="extra" hidden><th scope="row">Document ID</th><td>EIFU-00412</td></tr>
+                <tr class="extra" hidden><th scope="row">Document type</th><td>Instructions for Use</td></tr>
+                <tr class="extra" hidden><th scope="row">Pages</th><td>29</td></tr>
+                <tr class="extra" hidden><th scope="row">Effective date</th><td>12/19/2025</td></tr>
+                <tr class="extra" hidden><th scope="row">Region</th><td>US, EU, APAC</td></tr>
+              </tbody>
+            </table>
+            <button class="outline-btn" id="show-all" aria-expanded="false">Show All Fields</button>
+
+            <div class="acc">
+              <button aria-expanded="false" aria-controls="acc-codes">Product Codes <span class="count" data-count="#codes button"></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+              <div class="acc-body" id="acc-codes" hidden>
+                <div class="codes" id="codes" data-codes="RPTR071128 RPTR071132 RPTR074120 RPTR074132 BAT-100HPF BAT-010HPF BAT-LBSC1W BAT-KIT-01 BAT-KIT-02 BAT-KIT-03"></div>
+              </div>
+            </div>
+            <div class="acc">
+              <button aria-expanded="true" aria-controls="acc-langs">Languages Covered <span class="count" data-count="#acc-langs .chip"></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>
+              <div class="acc-body" id="acc-langs"><div class="chips"><span class="chip">English</span><span class="chip">Mandarin</span><span class="chip">French</span></div></div>
+            </div>
+          </section>
+
+          <section id="sec-notices" aria-labelledby="h-notices">
+            <h3 id="h-notices">Publisher Notices <span class="count" data-count="#sec-notices .pn"></span></h3>
+            <div class="notice pn">PHONE
+USA
+
+Phone: 800.722.0822
+
+Fax: 800.648.4309
+International
+
+Phone: 1.434.975.8000
+
+Fax: 1.434.975.4134
+EMAIL
+inquiry@microaire.com
+WEBSITE
+www.microaire.com</div>
+            <a class="legal pn" href="#">Legal Notice</a>
+            <div class="notice pn"><span class="watermark" role="img" aria-label="Watermark image"></span>Watermark</div>
+          </section>
+        </div>
+      </aside>
+    </div>
+
+    <div class="below">
+      <section class="ratings" aria-label="Ratings">
+        <div class="rating-head">
+          <button class="rating-toggle" id="rating-toggle" aria-expanded="true" aria-controls="categories">
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>Average Rating:
+          </button>
+          <span class="avg"><span class="stars" id="avg-stars" role="img" aria-label="Average rating 0 out of 5"></span><span class="score" id="avg-score">0/5</span></span>
+        </div>
+        <div class="categories" id="categories">
+          <h3>Categories</h3>
+          <dl id="rating-list"></dl>
+          <button class="submit-ratings" id="submit-ratings" disabled>Submit Your Ratings</button>
+        </div>
+      </section>
+
+      <section class="related" aria-labelledby="related-title">
+        <div class="related-head">
+          <h2 id="related-title">Related</h2>
+          <img src="assets/line.svg" alt="" width="1473" height="2">
+        </div>
+        <div class="cards" id="cards"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav class="foot-col" aria-labelledby="f-about">
+      <h2 id="f-about">About Us</h2>
+      <ul><li><a href="#">Contact Information</a></li><li><a href="#">Business</a></li><li><a href="#">About</a></li><li><a href="#">Partners</a></li></ul>
+    </nav>
+    <nav class="foot-col" aria-labelledby="f-eifu">
+      <h2 id="f-eifu">eIFU</h2>
+      <ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Footer notice placeholder</a></li><li><a href="#">Help</a></li><li><a href="#">Become a Publisher</a></li></ul>
+    </nav>
+    <nav class="foot-col" aria-labelledby="f-support">
+      <h2 id="f-support">Support</h2>
+      <ul><li><a href="#">Tutorial</a></li></ul>
+    </nav>
+    <nav class="foot-col" aria-labelledby="f-site">
+      <h2 id="f-site">Site Information</h2>
+      <ul><li><a href="#">Safe Harbor Privacy Policy</a></li><li><a href="#">Site Privacy</a></li><li><a href="#">Cookie Policy</a></li></ul>
+    </nav>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const mq = matchMedia('(max-width: 899.98px)');
+
+  /* ---- Fake but stable QR pattern ---- */
+  const N = 29;
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const cells = [];
+  const inFinder = (x, y) => [[0, 0], [N - 7, 0], [0, N - 7]].some(([fx, fy]) => x >= fx - 1 && x <= fx + 7 && y >= fy - 1 && y <= fy + 7);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!inFinder(x, y) && rnd() > .52) cells.push(`M${x} ${y}h1v1h-1z`);
+  const finder = ([x, y]) => `M${x} ${y}h7v7h-7zM${x + 1} ${y + 1}v5h5v-5zM${x + 2} ${y + 2}h3v3h-3z`;
+  const qrPath = [[0, 0], [N - 7, 0], [0, N - 7]].map(finder).join('') + cells.join('');
+  $$('svg.qr').forEach(s => s.innerHTML = `<path fill="var(--qr-ink)" fill-rule="evenodd" d="${qrPath}"/>`);
+
+  const pages = $('#pages');
+
+  /* ---- Toast ---- */
+  const toast = $('#toast'); let tt;
+  const say = msg => { toast.textContent = msg; toast.hidden = false; clearTimeout(tt); tt = setTimeout(() => toast.hidden = true, 2400); };
+
+  /* ---- Popovers (actions + QR) ---- */
+  const scrim = $('#scrim');
+  const pops = { 'btn-actions': $('#pop-actions'), 'btn-qr': $('#pop-qr') };
+  let openPop = null;
+  function closePop(focusBack) {
+    if (!openPop) return;
+    const btn = $('#' + openPop);
+    pops[openPop].hidden = true; btn.setAttribute('aria-expanded', 'false');
+    scrim.hidden = true; openPop = null;
+    if (focusBack) btn.focus();
+  }
+  function togglePop(id) {
+    const wasOpen = openPop === id;
+    closePop();
+    if (wasOpen) return;
+    openPop = id;
+    pops[id].hidden = false; $('#' + id).setAttribute('aria-expanded', 'true');
+    scrim.hidden = !mq.matches;
+    const first = pops[id].querySelector('button'); first && first.focus({ preventScroll: true });
+  }
+  Object.keys(pops).forEach(id => $('#' + id).addEventListener('click', e => { e.stopPropagation(); togglePop(id); }));
+  scrim.addEventListener('click', () => closePop());
+  document.addEventListener('click', e => { if (openPop && !pops[openPop].contains(e.target)) closePop(); });
+
+  // arrow-key navigation inside the actions menu
+  $('#pop-actions').addEventListener('keydown', e => {
+    const items = $$('[role=menuitem]', e.currentTarget), i = items.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+
+  $$('[data-toast]').forEach(b => b.addEventListener('click', () => { say(b.dataset.toast); closePop(true); }));
+  $('#fav').addEventListener('click', e => {
+    const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', on); b.querySelector('span').textContent = on ? 'Remove from favorites' : 'Add to favorites';
+    say(on ? 'Added to favorites' : 'Removed from favorites'); closePop(true);
+  });
+  $('#copy-link').addEventListener('click', () => {
+    const url = 'https://enlabel_global_services.eifu.com/eIFUGuide';
+    const done = () => { say('Link copied'); closePop(true); };
+    try { navigator.clipboard.writeText(url).then(done, done); } catch { done(); }
+  });
+
+  /* ---- Doc info: bottom sheet (mobile) / side panel (desktop) ---- */
+  const info = $('#info'), infoBtn = $('#btn-info'), stage = $('#stage');
+  const syncSheet = () => document.body.classList.toggle('sheet-open', mq.matches && !info.hidden);
+  new ResizeObserver(() => document.body.style.setProperty('--sheet-h', `${info.offsetHeight}px`)).observe(info);
+  function openInfo() {
+    closePop();
+    info.hidden = false; infoBtn.setAttribute('aria-expanded', 'true');
+    stage.classList.add('with-info'); syncSheet();
+    $('#info-close').focus({ preventScroll: true });
+  }
+  function closeInfo(focusBack) {
+    if (info.hidden) return;
+    info.hidden = true; infoBtn.setAttribute('aria-expanded', 'false');
+    stage.classList.remove('with-info'); syncSheet();
+    if (focusBack) infoBtn.focus({ preventScroll: true });
+    rerenderLive();
+  }
+  mq.addEventListener('change', syncSheet);
+  infoBtn.addEventListener('click', e => { e.stopPropagation(); info.hidden ? openInfo() : closeInfo(); });
+  $('#info-close').addEventListener('click', () => closeInfo(true));
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if ($('#viewer').classList.contains('fs')) toggleFs();   // native full screen handles Escape itself
+    else if (openPop) closePop(true); else closeInfo(true);
+  });
+
+  // tabs = jump links within the panel's own scroller, with scroll-spy
+  const body = $('#info-body'), tabs = $$('.tabs button');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let jumping = null;
+  const mark = t => tabs.forEach(x => x === t ? x.setAttribute('aria-current', 'true') : x.removeAttribute('aria-current'));
+  const secTop = sec => sec.getBoundingClientRect().top - body.getBoundingClientRect().top;
+  tabs.forEach(t => t.addEventListener('click', () => {
+    const sec = $('#' + t.dataset.target);
+    mark(t);
+    clearTimeout(jumping); jumping = setTimeout(() => jumping = null, 700);
+    body.scrollTo({ top: t === tabs[0] ? 0 : body.scrollTop + secTop(sec) - 4, behavior: reduce ? 'auto' : 'smooth' });
+  }));
+  body.addEventListener('scroll', () => {
+    if (jumping) return;
+    const atEnd = body.scrollTop + body.clientHeight >= body.scrollHeight - 4;
+    let current = tabs[0];
+    tabs.forEach(t => { if (secTop($('#' + t.dataset.target)) <= 40) current = t; });
+    mark(atEnd ? tabs[tabs.length - 1] : current);
+  }, { passive: true });
+
+  // product codes: click to copy
+  const codes = $('#codes');
+  codes.innerHTML = codes.dataset.codes.split(' ').map(c =>
+    `<button type="button" data-code="${c}" aria-label="Copy product code ${c}" title="Copy ${c}">${c}<svg aria-hidden="true"><use href="#i-copy"/></svg></button>`).join('');
+  codes.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const done = () => {
+      say(`Copied ${b.dataset.code}`);
+      b.classList.add('copied'); setTimeout(() => b.classList.remove('copied'), 400);
+    };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(b.firstChild); getSelection().removeAllRanges(); getSelection().addRange(r); say('Press Ctrl+C to copy'); };
+    try { navigator.clipboard.writeText(b.dataset.code).then(done, fallback); } catch { fallback(); }
+  });
+
+  // count chips reflect the items actually listed in each category
+  $$('.count[data-count]').forEach(c => c.textContent = $$(c.dataset.count).length);
+
+  // version picker (listbox)
+  const verBtn = $('#version .select-btn'), verList = $('#version-list'), verOpts = $$('[role=option]', verList);
+  let verActive = 0;
+  const setActive = i => {
+    verActive = (i + verOpts.length) % verOpts.length;
+    verOpts.forEach((o, j) => o.classList.toggle('active', j === verActive));
+    verList.setAttribute('aria-activedescendant', verOpts[verActive].id);
+    verOpts[verActive].scrollIntoView({ block: 'nearest' });
+  };
+  const openVer = () => {
+    verList.hidden = false; verBtn.setAttribute('aria-expanded', 'true');
+    setActive(verOpts.findIndex(o => o.getAttribute('aria-selected') === 'true')); verList.focus();
+  };
+  const closeVer = focusBack => {
+    if (verList.hidden) return;
+    verList.hidden = true; verBtn.setAttribute('aria-expanded', 'false');
+    if (focusBack) verBtn.focus();
+  };
+  const pickVer = i => {
+    verOpts.forEach((o, j) => o.setAttribute('aria-selected', j === i));
+    $('#version-value').textContent = verOpts[i].textContent;
+    closeVer(true);
+  };
+  verBtn.addEventListener('click', e => { e.stopPropagation(); verList.hidden ? openVer() : closeVer(true); });
+  verBtn.addEventListener('keydown', e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); openVer(); } });
+  verList.addEventListener('click', e => { const o = e.target.closest('[role=option]'); if (o) pickVer(verOpts.indexOf(o)); });
+  verList.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(verActive + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(verActive - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickVer(verActive); }
+    else if (e.key === 'Escape') { e.stopPropagation(); closeVer(true); }
+    else if (e.key === 'Tab') closeVer();
+  });
+  document.addEventListener('click', e => { if (!$('#version').contains(e.target)) closeVer(); });
+
+  // accordions + show all fields
+  $$('.acc > button').forEach(b => b.addEventListener('click', () => {
+    const open = b.getAttribute('aria-expanded') !== 'true';
+    b.setAttribute('aria-expanded', open); $('#' + b.getAttribute('aria-controls')).hidden = !open;
+  }));
+  $('#show-all').addEventListener('click', e => {
+    const b = e.currentTarget, open = b.getAttribute('aria-expanded') !== 'true';
+    b.setAttribute('aria-expanded', open); b.textContent = open ? 'Show Fewer Fields' : 'Show All Fields';
+    $$('#meta-table .extra').forEach(r => r.hidden = !open);
+  });
+
+  /* ---- Viewer: render the real PDF with pdf.js ---- */
+  const inputs = $$('.js-page');
+  let doc = null, zoom = 1, pageEls = [], ratio = 792 / 612;
+  const live = new Set();          // pages near the visible area, kept rendered
+  const tasks = new Map();         // in-flight render per page element
+
+  async function renderPage(el) {
+    if (!doc || !el.clientWidth) return;
+    const key = `${el.clientWidth}@${zoom}`;
+    if (el.dataset.key === key) return;
+    tasks.get(el)?.cancel();
+    const page = await doc.getPage(+el.dataset.page);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const vp = page.getViewport({ scale: (el.clientWidth / page.getViewport({ scale: 1 }).width) * dpr });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.floor(vp.width); canvas.height = Math.floor(vp.height);
+    const task = page.render({ canvasContext: canvas.getContext('2d'), viewport: vp });
+    tasks.set(el, task);
+    try {
+      await task.promise;
+      el.querySelector('canvas')?.remove();
+      el.prepend(canvas); el.dataset.key = key; el.classList.add('rendered');
+    } catch (err) { if (err?.name !== 'RenderingCancelledException') console.error(err); }
+    finally { if (tasks.get(el) === task) tasks.delete(el); }
+  }
+  function releasePage(el) {
+    tasks.get(el)?.cancel();
+    el.querySelector('canvas')?.remove(); el.classList.remove('rendered'); delete el.dataset.key;
+  }
+
+  // lazy-render pages near view; the pages box is the scroller at every breakpoint
+  let io;
+  function observe() {
+    io?.disconnect();
+    io = new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting) { live.add(en.target); renderPage(en.target); }
+      else { live.delete(en.target); releasePage(en.target); }
+    }), { root: pages, rootMargin: '1200px 0px' });
+    pageEls.forEach(el => io.observe(el));
+  }
+  let rerenderT;
+  // mobile: cap the viewer at 1.5x the height of a page at default zoom
+  function sizeViewer() {
+    if (!mq.matches) { pages.style.removeProperty('--max-h'); return; }
+    const cs = getComputedStyle(pages);
+    const pageW = Math.min(820, pages.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+    if (pageW > 0) pages.style.setProperty('--max-h', `${Math.round(pageW * ratio * 1.5 + parseFloat(cs.paddingTop))}px`);
+  }
+  function rerenderLive() { sizeViewer(); clearTimeout(rerenderT); rerenderT = setTimeout(() => live.forEach(renderPage), 150); }
+
+  const setZoom = z => {
+    zoom = Math.min(2, Math.max(.5, Math.round(z * 10) / 10));
+    pages.style.setProperty('--z', zoom); $$('.js-zoom-label').forEach(l => l.textContent = Math.round(zoom * 100) + '%');
+    rerenderLive();
+  };
+  $$('.js-zoom-in').forEach(b => b.onclick = () => setZoom(zoom + .1));
+  $$('.js-zoom-out').forEach(b => b.onclick = () => setZoom(zoom - .1));
+  $$('.js-zoom-fit').forEach(b => b.onclick = () => setZoom(1));
+
+  // full screen: the viewer element itself; iPhone Safari has no element full screen, so fill the window instead
+  const viewerEl = $('#viewer'), fsBtns = $$('.js-fs');
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const isFs = () => fsEl() === viewerEl || viewerEl.classList.contains('fs');
+  const setFallback = on => { viewerEl.classList.toggle('fs', on); document.documentElement.classList.toggle('fs-lock', on); syncFs(); };
+  function syncFs() {
+    const on = isFs();
+    fsBtns.forEach(b => {
+      b.setAttribute('aria-pressed', on); b.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+      b.querySelector('use').setAttribute('href', on ? '#i-collapse' : '#i-expand');
+    });
+    rerenderLive();
+  }
+  function toggleFs() {
+    if (viewerEl.classList.contains('fs')) return setFallback(false);
+    if (fsEl()) return (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    const req = viewerEl.requestFullscreen || viewerEl.webkitRequestFullscreen;
+    if (!req) return setFallback(true);
+    const p = req.call(viewerEl);
+    if (p && p.catch) p.catch(() => setFallback(true));
+  }
+  fsBtns.forEach(b => b.addEventListener('click', toggleFs));
+  document.addEventListener('fullscreenchange', syncFs);
+  document.addEventListener('webkitfullscreenchange', syncFs);
+
+  // current page = the page crossing the middle of the visible area
+  function trackPage() {
+    if (!pageEls.length || inputs.includes(document.activeElement)) return;
+    const r = pages.getBoundingClientRect();
+    const mid = (r.top + r.bottom) / 2;
+    const cur = pageEls.find(el => el.getBoundingClientRect().bottom > mid) || pageEls[pageEls.length - 1];
+    inputs.forEach(i => i.value = cur.dataset.page);
+  }
+  pages.addEventListener('scroll', trackPage, { passive: true });
+  addEventListener('resize', rerenderLive);
+  mq.addEventListener('change', () => { closePop(); rerenderLive(); });
+  new ResizeObserver(rerenderLive).observe(pages);   // doc info panel opening narrows the viewer
+
+  inputs.forEach(input => input.addEventListener('change', () => {
+    const n = Math.min(pageEls.length || 1, Math.max(1, parseInt(input.value, 10) || 1));
+    inputs.forEach(i => i.value = n);
+    const el = pageEls[n - 1];
+    if (el) pages.scrollTo({ top: el.offsetTop - pages.offsetTop - 8, behavior: 'smooth' });
+  }));
+
+  (async () => {
+    const lib = window['pdfjs-dist/build/pdf'];
+    try {
+      if (!lib) throw new Error('pdf.js did not load');
+      doc = await lib.getDocument({ url: 'eifu-comprehensive-guide.pdf', isEvalSupported: false }).promise;
+      const first = await doc.getPage(1), v = first.getViewport({ scale: 1 });
+      ratio = v.height / v.width; sizeViewer();
+      pages.innerHTML = '';
+      for (let n = 1; n <= doc.numPages; n++) {
+        const el = document.createElement('article');
+        el.className = 'page'; el.dataset.page = n; el.setAttribute('aria-label', `Page ${n}`);
+        el.style.aspectRatio = `${v.width} / ${v.height}`;
+        pages.appendChild(el); pageEls.push(el);
+      }
+      $$('.js-total').forEach(t => t.textContent = `of ${doc.numPages}`);
+      pages.removeAttribute('aria-busy');
+      observe(); trackPage();
+    } catch (err) {
+      console.error(err);
+      $('#pdf-status').textContent = 'The document could not be loaded. Reload the page to try again.';
+    }
+  })();
+
+  /* ---- Ratings ---- */
+  const starSvg = '<svg viewBox="0 0 20 20" aria-hidden="true"><path class="star-path" d="M10 1.8l2.5 5.2 5.7.8-4.1 4 1 5.7L10 14.8l-5.1 2.7 1-5.7-4.1-4 5.7-.8z"/></svg>';
+  const cats = ['Completeness', 'Ease of Use', 'Format', 'Overall'];
+  const ratings = Object.fromEntries(cats.map(c => [c, 0]));
+  const paint = (wrap, n) => [...wrap.children].forEach((st, i) => st.classList.toggle('on', i < n));
+  $('#avg-stars').innerHTML = Array(5).fill(`<span>${starSvg}</span>`).join('');
+  $('#rating-list').innerHTML = cats.map(c => `<dt>${c}:</dt><dd><span class="stars" role="radiogroup" aria-label="${c}" data-cat="${c}">${
+    [1, 2, 3, 4, 5].map(n => `<button class="star-btn" role="radio" aria-checked="false" aria-label="${n} star${n > 1 ? 's' : ''}" data-n="${n}">${starSvg}</button>`).join('')
+  }</span><span class="score">0/5</span></dd>`).join('');
+  function updateAvg() {
+    const rated = cats.filter(c => ratings[c]);
+    const avg = rated.length ? rated.reduce((a, c) => a + ratings[c], 0) / rated.length : 0;
+    paint($('#avg-stars'), Math.round(avg));
+    $('#avg-score').textContent = `${+avg.toFixed(1)}/5`;
+    $('#avg-stars').setAttribute('aria-label', `Average rating ${+avg.toFixed(1)} out of 5`);
+    $('#submit-ratings').disabled = !rated.length;
+  }
+  $$('#rating-list .stars').forEach(group => {
+    const set = n => {
+      ratings[group.dataset.cat] = n; paint(group, n);
+      group.nextElementSibling.textContent = `${n}/5`;
+      [...group.children].forEach((b, i) => b.setAttribute('aria-checked', i + 1 === n));
+      updateAvg();
+    };
+    group.addEventListener('click', e => { const b = e.target.closest('button'); if (b) set(+b.dataset.n); });
+    group.addEventListener('mouseover', e => { const b = e.target.closest('button'); if (b) paint(group, +b.dataset.n); });
+    group.addEventListener('mouseleave', () => paint(group, ratings[group.dataset.cat]));
+  });
+  $('#rating-toggle').addEventListener('click', e => {
+    const b = e.currentTarget, open = b.getAttribute('aria-expanded') !== 'true';
+    b.setAttribute('aria-expanded', open); $('#categories').hidden = !open;
+  });
+  $('#submit-ratings').addEventListener('click', e => { say('Thanks, your ratings were submitted'); e.currentTarget.disabled = true; });
+
+  /* ---- Related documents ---- */
+  $('#cards').innerHTML = Array.from({ length: 6 }, (_, i) => `
+    <article class="doc-card">
+      <button class="open" aria-label="Open Document Title ${i + 1}">
+        <img src="assets/demo photo.png" alt="" width="244" height="351" loading="lazy">
+      </button>
+      <div class="card-body">
+        <div class="crumb">Hierarchy &gt; Hierarchy 2 &gt; Hierarchy 3</div>
+        <h3 class="title">Document Title</h3>
+        <div class="card-actions">
+          <button class="fav" aria-pressed="false" aria-label="Add to favorites" title="Add to favorites"><svg class="heart" aria-hidden="true"><use class="off" href="#i-heart"/><use class="on" href="#i-heart-fill"/></svg></button>
+          <button class="qr-icon" aria-label="Show QR code" title="QR code"><svg aria-hidden="true"><use href="#i-qr"/></svg></button>
+        </div>
+      </div>
+    </article>`).join('');
+  $('#cards').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.classList.contains('fav')) {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on); b.setAttribute('aria-label', on ? 'Remove from favorites' : 'Add to favorites');
+      say(on ? 'Added to favorites' : 'Removed from favorites');
+    } else if (b.classList.contains('qr-icon')) say('Opens this document’s QR code');
+    else say('Opens this related document');
+  });
+
+  $('#search-form').addEventListener('submit', e => { e.preventDefault(); say('Search runs on the live site; this prototype covers the document view.'); });
+})();
+</script>
+
+</body></html>
