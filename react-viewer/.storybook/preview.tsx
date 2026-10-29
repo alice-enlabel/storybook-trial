@@ -1,4 +1,6 @@
 import type { Preview } from '@storybook/react-vite'
+// enLabel tokens + the Generic UI and viewer styles, so stories render like the app.
+import '../src/index.css'
 
 const preview: Preview = {
   parameters: {
