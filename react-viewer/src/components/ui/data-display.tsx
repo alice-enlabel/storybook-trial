@@ -10,6 +10,19 @@ export function Chip({ children }: { children: ReactNode }) {
   return <span className="ui-chip">{children}</span>
 }
 
+/** Figma "Chip Group": a wrapping list of read-only Chips, e.g. languages covered. */
+export function ChipGroup({ items, label }: { items: string[]; label?: string }) {
+  return (
+    <ul className="ui-chip-group" aria-label={label}>
+      {items.map((item) => (
+        <li key={item}>
+          <Chip>{item}</Chip>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 type KeyValueRowProps = {
   label: string
   children: ReactNode

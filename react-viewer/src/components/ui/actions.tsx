@@ -1,9 +1,12 @@
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { forwardRef, useEffect, useState, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { Icon, type IconName } from './Icon'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  /** Outline = secondary action, Muted = low-emphasis action (e.g. search submit). */
-  variant?: 'outline' | 'muted'
+  /**
+   * Outline = secondary action, Muted = low-emphasis action, Primary = main
+   * action (e.g. search submit): eIFU teal, greyed out while disabled.
+   */
+  variant?: 'outline' | 'muted' | 'primary'
   icon?: IconName
   block?: boolean
 }
@@ -88,5 +91,57 @@ export function TextLink({ underline = true, icon, children, className, ...rest 
     <button type="button" className={cls} {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}>
       {content}
     </button>
+  )
+}
+
+type CopyCodeProps = {
+  code: string
+  /** What the code is, for the accessible name: "Copy {kind} {code}". */
+  kind?: string
+  /** Copy to the clipboard and confirm (e.g. a toast). */
+  onCopy: (code: string) => void
+}
+
+/** How long the Copied state shows after a click. */
+const COPIED_MS = 1200
+
+/**
+ * Figma "Copy Code": a monospace code value that copies itself on click.
+ * Default: plain text. Hover/focus: grey fill and the copy icon appears.
+ * Copied: eIFU teal with white text for 1.2s after a click.
+ */
+export function CopyCode({ code, kind = 'code', onCopy }: CopyCodeProps) {
+  const [copiedAt, setCopiedAt] = useState(0)
+  useEffect(() => {
+    if (!copiedAt) return
+    const t = window.setTimeout(() => setCopiedAt(0), COPIED_MS)
+    return () => window.clearTimeout(t)
+  }, [copiedAt])
+  return (
+    <button
+      type="button"
+      className={['ui-copy-code', copiedAt && 'ui-copy-code--copied'].filter(Boolean).join(' ')}
+      onClick={() => {
+        onCopy(code)
+        setCopiedAt(Date.now())
+      }}
+      aria-label={`Copy ${kind} ${code}`}
+    >
+      {code}
+      <Icon name="copy-link" size={14} />
+    </button>
+  )
+}
+
+/** Wrapping list of Copy Codes, e.g. a document's product codes. */
+export function CopyCodeList({ codes, kind, onCopy }: { codes: string[] } & Omit<CopyCodeProps, 'code'>) {
+  return (
+    <ul className="ui-copy-code-list">
+      {codes.map((code) => (
+        <li key={code}>
+          <CopyCode code={code} kind={kind} onCopy={onCopy} />
+        </li>
+      ))}
+    </ul>
   )
 }

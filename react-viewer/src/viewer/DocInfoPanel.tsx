@@ -3,9 +3,9 @@ import {
   Accordion,
   Badge,
   Button,
-  Chip,
-  Icon,
+  ChipGroup,
   ContentCard,
+  CopyCodeList,
   DescriptionItem,
   KeyValueList,
   KeyValueRow,
@@ -37,7 +37,6 @@ export function DocInfoPanel({ doc, onClose, onCopyCode }: DocInfoPanelProps) {
   const [tab, setTab] = useState('overview')
   const [version, setVersion] = useState(doc.versions[0].value)
   const [showAll, setShowAll] = useState(false)
-  const [copied, setCopied] = useState<string | null>(null)
   const rootRef = useRef<HTMLElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const jumping = useRef(false)
@@ -121,32 +120,10 @@ export function DocInfoPanel({ doc, onClose, onCopyCode }: DocInfoPanelProps) {
             {showAll ? 'Show Fewer Fields' : 'Show All Fields'}
           </Button>
           <Accordion title="Product Codes" count={doc.productCodes.length}>
-            <ul className="docinfo__codes">
-              {doc.productCodes.map((code) => (
-                <li key={code}>
-                  <button
-                    type="button"
-                    className={['docinfo__code', copied === code && 'is-copied'].filter(Boolean).join(' ')}
-                    onClick={() => {
-                      onCopyCode(code)
-                      setCopied(code)
-                      window.setTimeout(() => setCopied((c) => (c === code ? null : c)), 1200)
-                    }}
-                    aria-label={`Copy product code ${code}`}
-                  >
-                    {code}
-                    <Icon name="copy-link" size={14} />
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <CopyCodeList codes={doc.productCodes} kind="product code" onCopy={onCopyCode} />
           </Accordion>
           <Accordion title="Languages Covered" count={doc.languages.length} defaultOpen>
-            <div className="docinfo__chips">
-              {doc.languages.map((l) => (
-                <Chip key={l}>{l}</Chip>
-              ))}
-            </div>
+            <ChipGroup items={doc.languages} label="Languages covered" />
           </Accordion>
         </section>
 

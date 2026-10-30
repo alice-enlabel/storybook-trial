@@ -3,12 +3,10 @@ import {
   AppHeader,
   BackLink,
   Breadcrumb,
-  Button,
   ContentHeader,
   IconButton,
   MediaPopover,
   Menu,
-  TextField,
   type MenuEntry,
 } from '../components/ui'
 import { usePresence } from '../components/ui/usePresence'
@@ -17,6 +15,7 @@ import { DocInfoPanel } from './DocInfoPanel'
 import { PdfViewer } from './PdfViewer'
 import { Ratings } from './Ratings'
 import { RelatedDocs } from './RelatedDocs'
+import { SearchCard } from './SearchCard'
 import { SiteFooter } from './SiteFooter'
 import { useToast } from './Toast'
 import type { ViewerDocument } from './document-data'
@@ -124,22 +123,7 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
       <AppHeader logo={<img src={logo} alt="eIFU" width={198} height={100} className="page__logo" />} onMenu={() => toast('Site menu')} />
 
       <main className="page__main">
-        <form
-          className="search-card"
-          role="search"
-          onSubmit={(e) => {
-            e.preventDefault()
-            toast('Search runs on the live site; this prototype covers the document view.')
-          }}
-        >
-          <div className="search-card__fields">
-            <TextField label="Search Criteria 1" name="q1" />
-            <TextField label="Search Criteria 2" name="q2" />
-          </div>
-          <Button variant="muted" icon="search" type="submit" block className="search-card__submit" aria-label="Search">
-            <span className="search-card__submit-label">Search</span>
-          </Button>
-        </form>
+        <SearchCard onSearch={() => toast('Search runs on the live site; this prototype covers the document view.')} />
 
         <div className="page__nav">
           <a href="#" className="page__nav-mobile">

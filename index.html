@@ -55,6 +55,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .search .go { width: 86px; height: 40px; border-radius: 8px; background: #C4C4C4; display: grid; place-items: center; color: #3A3A3A; }
 .search .go svg { width: 28px; height: 28px; }
 .search .go span { display: none; }
+.search .go:disabled { cursor: default; }
+.search .go:not(:disabled) { background: var(--eifu-teal); color: #fff; }
+.search .go:not(:disabled):hover { background: #3B6E8F; }
 
 /* ---------- Doc header ---------- */
 .crumbs { margin-top: 16px; font-size: 15px; }
@@ -458,7 +461,7 @@ html.fs-lock { overflow: hidden; }
     <form id="search-form">
       <label>Search Criteria 1 <input id="q1" type="text"></label>
       <label>Search Criteria 2 <input id="q2" type="text"></label>
-      <button class="go" type="submit" aria-label="Search"><svg aria-hidden="true"><use href="#i-search"/></svg><span>Search</span></button>
+      <button class="go" type="submit" aria-label="Search" disabled><svg aria-hidden="true"><use href="#i-search"/></svg><span>Search</span></button>
     </form>
   </section>
 
@@ -1055,6 +1058,11 @@ www.microaire.com</div>
     else say('Opens this related document');
   });
 
+  // Search stays disabled (grey) until either field has text, then turns eIFU teal.
+  $('#search-form').addEventListener('input', e => {
+    const f = e.currentTarget;
+    f.querySelector('.go').disabled = ![f.q1, f.q2].some(i => i.value.trim());
+  });
   $('#search-form').addEventListener('submit', e => { e.preventDefault(); say('Search runs on the live site; this prototype covers the document view.'); });
 })();
 </script>

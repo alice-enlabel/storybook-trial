@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Badge, Chip, ContentHeader, DescriptionItem, KeyValueList, KeyValueRow } from './data-display'
+import { Badge, Chip, ChipGroup, ContentHeader, DescriptionItem, KeyValueList, KeyValueRow } from './data-display'
 import { IconButton } from './actions'
 
 // Small display pieces share one page; each export is its own story.
@@ -13,7 +13,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Count pill next to a heading. */
+/** Count pill next to a heading, e.g. the number of items inside an Accordion. */
 export const BadgeStory: Story = { name: 'Badge' }
 
 /** Read-only tags, e.g. languages covered. */
@@ -23,6 +23,16 @@ export const Chips: Story = {
       <Chip>English</Chip>
       <Chip>Mandarin</Chip>
       <Chip>French</Chip>
+    </div>
+  ),
+}
+
+/** Chips in a wrapping list, e.g. the languages a document covers. */
+export const ChipGroupStory: Story = {
+  name: 'Chip Group',
+  render: () => (
+    <div style={{ maxWidth: 240 }}>
+      <ChipGroup items={['English', 'Mandarin', 'French', 'German', 'Spanish', 'Japanese']} label="Languages covered" />
     </div>
   ),
 }

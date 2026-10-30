@@ -67,6 +67,18 @@
 .ui-button--muted:hover {
   background: var(--color-border-default);
 }
+.ui-button--primary {
+  background: var(--color-brand-primary);
+  color: var(--color-text-on-brand);
+}
+.ui-button--primary:hover:not(:disabled) {
+  background: var(--color-brand-primary-strong);
+}
+.ui-button--primary:disabled {
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+  cursor: default;
+}
 .ui-button--block {
   width: 100%;
 }
@@ -251,6 +263,61 @@
   background: var(--color-surface-selected);
   color: var(--color-text-secondary);
   font: 400 14px/1.4 var(--font-family);
+}
+.ui-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Copy Code ------------------------------------------------------------- */
+.ui-copy-code-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ui-copy-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #3b4248;
+  font: 14px/1.4 ui-monospace, Consolas, monospace;
+  cursor: copy;
+  transition: background-color 0.12s, color 0.12s;
+}
+.ui-copy-code .ui-icon {
+  color: var(--color-icon-accent);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.ui-copy-code:hover,
+.ui-copy-code:focus-visible {
+  background: #dce3e8;
+  color: var(--color-neutral-strongest);
+}
+.ui-copy-code:hover .ui-icon,
+.ui-copy-code:focus-visible .ui-icon {
+  opacity: 1;
+}
+.ui-copy-code--copied,
+.ui-copy-code--copied:hover,
+.ui-copy-code--copied:focus-visible {
+  background: var(--color-brand-primary);
+  color: var(--color-text-on-brand);
+}
+.ui-copy-code--copied .ui-icon {
+  color: var(--color-text-on-brand);
+  opacity: 1;
 }
 
 /* Key-Value Row --------------------------------------------------------- */

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
-import { Accordion, ContentCard, MediaPopover, Menu, PanelHeader } from './overlays'
-import { Chip } from './data-display'
+import { ContentCard, MediaPopover, Menu, PanelHeader } from './overlays'
 import qrCode from '../../assets/images/qr-code.png'
 
 const meta = {
@@ -40,24 +39,6 @@ export const Panel: Story = {
   render: () => (
     <div style={{ maxWidth: 420 }}>
       <PanelHeader title="Document info" onClose={fn()} />
-    </div>
-  ),
-}
-
-/** The chevron rotates and the content slides open. */
-export const Accordions: Story = {
-  render: () => (
-    <div style={{ maxWidth: 420 }}>
-      <Accordion title="Product Codes" count={10}>
-        <p style={{ margin: 0 }}>RPTR071128 · RPTR071132 · RPTR074120</p>
-      </Accordion>
-      <Accordion title="Languages Covered" count={3} defaultOpen>
-        <div style={{ display: 'flex', gap: 6 }}>
-          <Chip>English</Chip>
-          <Chip>Mandarin</Chip>
-          <Chip>French</Chip>
-        </div>
-      </Accordion>
     </div>
   ),
 }
