@@ -2,6 +2,8 @@ import type { Preview } from '@storybook/react-vite'
 // enLabel tokens + the Generic UI and viewer styles, so stories render like the app.
 import '../src/index.css'
 
+import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from 'storybook/viewport';
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -9,6 +11,13 @@ const preview: Preview = {
        color: /(background|color)$/i,
        date: /Date$/i,
       },
+    },
+
+    viewport: {
+      viewports: {
+        ...INITIAL_VIEWPORTS,
+        ...MINIMAL_VIEWPORTS
+      }
     },
 
     a11y: {
