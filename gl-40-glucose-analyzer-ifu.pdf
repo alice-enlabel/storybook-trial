@@ -1,0 +1,539 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R] /Count 14 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1176 >>
+stream
+0.97 0.98 0.98 rg 0 0 612 792 re f
+0.267 0.475 0.584 rg 0 700 612 92 re f
+1 1 1 rg BT /F2 20 Tf 54 752 Td (CORVANE DIAGNOSTICS) Tj ET
+1 1 1 rg BT /F1 11 Tf 54 728 Td (Point-of-care testing) Tj ET
+0.267 0.475 0.584 rg BT /F2 30 Tf 54 630 Td (GL-40 Glucose Analyzer) Tj ET
+0.15 0.17 0.19 rg BT /F1 12 Tf 54 604 Td (Model GL-40  |  REF GL4000) Tj ET
+0.15 0.17 0.19 rg BT /F2 36 Tf 54 540 Td (Instructions for Use) Tj ET
+0.86 0.9 0.92 rg 216 250 180 230 re f
+0.4 0.45 0.5 RG 1 w 216 250 180 230 re S
+0.2 0.3 0.36 rg 236 380 140 80 re f
+0.6 0.95 0.85 rg BT /F2 15 Tf 262 413 Td (5.6 mmol/L) Tj ET
+0.267 0.475 0.584 rg 246 320 32 32 re f
+0.267 0.475 0.584 rg 292 320 32 32 re f
+0.267 0.475 0.584 rg 338 320 32 32 re f
+0.75 0.8 0.83 rg 286 262 40 40 re f
+0.15 0.17 0.19 rg BT /F1 11 Tf 54 190 Td (Read this manual completely before using the analyzer.) Tj ET
+0.15 0.17 0.19 rg BT /F1 11 Tf 54 172 Td (For in vitro diagnostic use. For professional use only.) Tj ET
+0.15 0.17 0.19 rg BT /F2 11 Tf 54 120 Td (Version 3.0  |  Effective 08/14/2026) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 1 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 1815 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (Contents) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 666 Td (1.  Intended Use) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 644 Td (2.  Warnings and Precautions) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 622 Td (3.  Symbols Glossary) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 600 Td (4.  System Components) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 578 Td (5.  Setup and Installation) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 556 Td (6.  Quality Control) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 534 Td (7.  Running a Patient Test) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 512 Td (8.  Results and Reporting) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 490 Td (9.  Cleaning and Disinfection) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 468 Td (10.  Maintenance and Storage) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 446 Td (11.  Troubleshooting) Tj ET
+0.15 0.17 0.19 rg BT /F1 11.5 Tf 54 424 Td (12.  Technical Specifications) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 392 Td (This manual covers the GL-40 Glucose Analyzer with software 3.x. Keep it with the analyzer,) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 377.5 Td (and make sure every operator has read it before testing patients. Electronic copies of the) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 363.0 Td (current version, and of earlier versions, are available on the eIFU site listed on the) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 348.5 Td (device label.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 2 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 2935 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (1. Intended Use) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 666 Td (The GL-40 Glucose Analyzer is a benchtop in vitro diagnostic device for the quantitative) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 651.5 Td (measurement of glucose in fresh capillary whole blood, venous whole blood and heparinized) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 637.0 Td (plasma. It is intended for use by trained healthcare professionals in hospital, clinic and) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 622.5 Td (physician office settings as an aid in the management of patients with diabetes mellitus.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 603.0 Td (The analyzer is not intended for the diagnosis of or screening for diabetes, and it is not) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 588.5 Td (intended for neonatal samples. Results must be interpreted together with the clinical) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 574.0 Td (picture and other laboratory findings.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 554.5 Td (1.1 Indications) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 536.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 536.5 Td (Routine glucose monitoring of patients with known diabetes.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 517.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 517.0 Td (Monitoring of glucose during insulin infusion protocols, together with laboratory) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 502.5 Td (confirmation.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 483.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 483.0 Td (Spot checks of glucose in outpatient and ward settings.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 463.5 Td (1.2 Contraindications) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 445.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 445.5 Td (Do not use on samples from patients in severe shock or severe dehydration.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 426.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 426.0 Td (Do not use with samples containing fluoride or EDTA preservatives.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 406.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 406.5 Td (Do not use with hematocrit outside 20% to 65%.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 387.0 Td (1.3 Intended operators) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 369.0 Td (Operators must complete the GL-40 operator training and pass the competency assessment) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 354.5 Td (defined by their facility before running patient samples.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 3 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 3128 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (2. Warnings and Precautions) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 666 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 666 Td (Treat all blood samples and used test cartridges as potentially infectious. Wear gloves) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 651.5 Td (and follow your facility infection control policy.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 632.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 632.0 Td (Use only GL-40 test cartridges and GL-40 control solutions. Other consumables give) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 617.5 Td (unreliable results.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 598.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 598.0 Td (Do not use cartridges past the expiry date printed on the pouch, or cartridges from a) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 583.5 Td (damaged pouch.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 564.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 564.0 Td (Keep the analyzer away from direct sunlight, heat sources and strong electromagnetic) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 549.5 Td (fields such as MRI rooms.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 530.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 530.0 Td (Do not immerse the analyzer in liquid, and do not spray cleaning solutions directly onto) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 515.5 Td (it.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 496.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 496.0 Td (A result below 2.2 mmol/L \(40 mg/dL\) or above 27.8 mmol/L \(500 mg/dL\) must be confirmed) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 481.5 Td (by a laboratory method before treatment decisions are made.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 462.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 462.0 Td (Interfering substances: high doses of ascorbic acid, acetaminophen above therapeutic) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 447.5 Td (levels and maltose-containing infusions may affect results. See section 12.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 428.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 428.0 Td (Use only the supplied power adapter. Another adapter may damage the analyzer and void the) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 413.5 Td (warranty.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 394.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 394.0 Td (If the analyzer has been dropped, run a quality control test before testing patients.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 374.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 374.5 Td (Federal law restricts this device to sale by or on the order of a licensed healthcare) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 360.0 Td (practitioner.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 4 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 2370 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (3. Symbols Glossary) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 666 Td (IVD) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 666 Td (In vitro diagnostic medical device) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 649 Td (REF) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 649 Td (Catalogue number) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 632 Td (LOT) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 632 Td (Batch code) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 615 Td (SN) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 615 Td (Serial number) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 598 Td (Hourglass) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 598 Td (Use-by date) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 581 Td (Factory) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 581 Td (Manufacturer) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 564 Td (Book with i) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 564 Td (Consult instructions for use or the electronic IFU) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 547 Td (Thermometer) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 547 Td (Temperature limit) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 530 Td (Crossed 2) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 530 Td (Do not re-use) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 513 Td (Biohazard) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 513 Td (Biological risk) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 496 Td (Exclamation) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 496 Td (Caution) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 479 Td (Rx only) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 479 Td (Prescription use only) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 462 Td (CE 2797) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 174 462 Td (Conformity marking with notified body number) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 439 Td (Symbols follow ISO 15223-1. Labels on the analyzer, the cartridge pouch and the control) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 424.5 Td (solution vials use the same symbols.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 5 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 16 0 R >>
+endobj
+16 0 obj
+<< /Length 2640 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (4. System Components) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 666 Td (4.1 In the box) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 648 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 648 Td (GL-40 analyzer) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 628.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 628.5 Td (Power adapter and country plug set) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 609.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 609.0 Td (Docking cradle with USB cable) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 589.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 589.5 Td (Quick reference card) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 570.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 570.0 Td (Operator training certificate template) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 550.5 Td (4.2 Sold separately) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 532.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 532.5 Td (GL-40 test cartridges, box of 50) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 513.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 513.0 Td (GL-40 control solutions, levels 1 and 2) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 493.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 493.5 Td (GL-40 linearity kit) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 474.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 474.0 Td (Barcode scanner accessory) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 454.5 Td (4.3 Analyzer overview) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 436.5 Td (The front of the analyzer has a 5-inch touch screen, the cartridge port and a status light.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 422.0 Td (The status light is green when ready, amber while a test runs and red when the analyzer) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 407.5 Td (needs attention. The rear panel has the power socket, the USB port and the network port.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 388.0 Td (The analyzer stores up to 5,000 patient results and 1,000 quality control results. When) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 373.5 Td (storage is full, the oldest results that have already been sent to the host system are) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 359.0 Td (removed first.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 6 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 18 0 R >>
+endobj
+18 0 obj
+<< /Length 2097 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (5. Setup and Installation) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 666 Td (Place the analyzer on a level, stable surface with at least 10 cm of clear space around the) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 651.5 Td (ventilation slots. Operate it between 15 C and 32 C and between 10% and 85% relative) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 637.0 Td (humidity, non-condensing.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 617.5 Td (5.1 First start) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 599.5 Td (1. Connect the power adapter and press the power button for two seconds.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 580.0 Td (2. Select the language, date format and units \(mmol/L or mg/dL\).) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 560.5 Td (3. Set the date and time. Results are time stamped with this clock.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 541.0 Td (4. Create the administrator account and set an administrator PIN.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 521.5 Td (5. Add operator accounts, or connect the analyzer to your directory service.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 502.0 Td (6. Run quality control at both levels before testing patients.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 482.5 Td (5.2 Connecting to a host system) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 464.5 Td (The analyzer sends results in POCT1-A format over the network port, or through the docking) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 450.0 Td (cradle. Your IT department configures the host address in Settings > Connectivity. Results) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 435.5 Td (that cannot be sent are queued and sent automatically when the connection returns.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 7 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 20 0 R >>
+endobj
+20 0 obj
+<< /Length 2173 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (6. Quality Control) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 666 Td (Run quality control at both levels:) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 646.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 646.5 Td (each day the analyzer is used for patient testing;) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 627.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 627.0 Td (when a new lot of cartridges is opened;) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 607.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 607.5 Td (after the analyzer has been dropped or serviced;) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 588.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 588.0 Td (whenever results do not match the clinical picture.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 568.5 Td (6.1 Running a control test) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 550.5 Td (1. Select Quality Control on the home screen.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 531.0 Td (2. Scan or enter the control lot number.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 511.5 Td (3. Insert a new cartridge.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 492.0 Td (4. Apply one drop of control solution to the sample well.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 472.5 Td (5. Wait for the result, then confirm that it falls within the range printed on the vial.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 453.0 Td (6.2 Lockout) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 435.0 Td (When a control result is out of range, the analyzer locks patient testing for that operator) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 420.5 Td (until a passing control result is recorded. An administrator can configure lockout rules in) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 406.0 Td (Settings > Quality Control.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 8 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 22 0 R >>
+endobj
+22 0 obj
+<< /Length 1820 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (7. Running a Patient Test) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 666 Td (1. Log in with your operator ID.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 646.5 Td (2. Scan or enter the patient ID, and confirm it on screen.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 627.0 Td (3. Open a cartridge pouch and insert the cartridge with the arrow facing up.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 607.5 Td (4. Collect the sample. For capillary samples, wipe away the first drop of blood.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 588.0 Td (5. Touch the drop to the sample well within 60 seconds of inserting the cartridge.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 568.5 Td (6. Do not move the analyzer while the result is measured \(about 6 seconds\).) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 549.0 Td (7. Review the result and add comments if needed.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 529.5 Td (8. Remove and discard the cartridge into a biohazard container.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 510.0 Td (7.1 Sample handling) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 492.0 Td (Test venous whole blood within 30 minutes of collection. Plasma samples may be stored at 2 C) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 477.5 Td (to 8 C for up to 4 hours. Mix venous samples gently by inversion before testing. Do not use) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 463.0 Td (clotted or hemolyzed samples.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 9 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 24 0 R >>
+endobj
+24 0 obj
+<< /Length 2051 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (8. Results and Reporting) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 666 Td (Results are shown in the units selected at setup. The measuring range is 0.6 to 33.3 mmol/L) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 651.5 Td (\(10 to 600 mg/dL\). Results outside this range are shown as LO or HI and must be confirmed) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 637.0 Td (with a laboratory method.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 617.5 Td (Display) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 204 617.5 Td (Meaning) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 600.5 Td (LO) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 204 600.5 Td (Below 0.6 mmol/L \(10 mg/dL\)) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 583.5 Td (HI) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 204 583.5 Td (Above 33.3 mmol/L \(600 mg/dL\)) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 566.5 Td (Critical flag) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 204 566.5 Td (Result outside the critical limits set by the administrator) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 549.5 Td (QC flag) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 204 549.5 Td (Patient result recorded while a QC lot was near expiry) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 526.5 Td (Results are sent to the host system automatically. Each record contains the patient ID, the) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 512.0 Td (operator ID, the date and time, the cartridge lot and the analyzer serial number.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 492.5 Td (To review stored results, select History on the home screen. Results can be filtered by) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 478.0 Td (patient, operator or date.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 10 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 26 0 R >>
+endobj
+26 0 obj
+<< /Length 1959 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (9. Cleaning and Disinfection) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 666 Td (Clean and disinfect the analyzer between patients when it has been visibly contaminated, and) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 651.5 Td (at least once a day.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 632.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 632.0 Td (Turn the analyzer off and disconnect it from power.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 612.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 612.5 Td (Wipe all outer surfaces with a lint-free cloth moistened with 70% isopropyl alcohol or a) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 598.0 Td (facility-approved quaternary ammonium wipe.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 578.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 578.5 Td (Keep liquid out of the cartridge port, the ports on the rear panel and the ventilation) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 564.0 Td (slots.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 544.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 544.5 Td (Leave the disinfectant on the surface for the contact time stated by its manufacturer.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 525.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 525.0 Td (Let the analyzer dry completely before turning it on again.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 505.5 Td (Avoid bleach solutions stronger than 0.5%, acetone and abrasive cleaners. They can damage) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 491.0 Td (the touch screen coating and the housing.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 11 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 28 0 R >>
+endobj
+28 0 obj
+<< /Length 1693 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (10. Maintenance and Storage) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 666 Td (10.1 Routine maintenance) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 648 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 648 Td (Daily: clean the analyzer and run quality control.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 628.5 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 628.5 Td (Monthly: check the cartridge port for debris.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 60 609.0 Td (-) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 70 609.0 Td (Every 12 months: run the linearity kit, or after any service.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 589.5 Td (10.2 Software updates) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 571.5 Td (Updates are installed from the host system or from a USB drive supplied by service. Results) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 557.0 Td (and settings are kept during an update. Do not turn the analyzer off while an update runs.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 537.5 Td (10.3 Storage) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 519.5 Td (Store the analyzer between -10 C and 50 C. Store test cartridges between 4 C and 30 C in) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 505.0 Td (their sealed pouches. Once a pouch is opened, use the cartridge within 15 minutes.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 12 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 30 0 R >>
+endobj
+30 0 obj
+<< /Length 1895 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (11. Troubleshooting) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 666 Td (E-01 Cartridge error) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 666 Td (Remove the cartridge and insert a new one.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 649 Td (E-04 Sample too small) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 649 Td (Repeat the test with a new cartridge and a full drop.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 632 Td (E-07 Temperature) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 632 Td (Move the analyzer into its operating range and wait 20 minutes.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 615 Td (E-11 QC lockout) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 615 Td (Run a passing quality control test.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 598 Td (E-15 Expired lot) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 598 Td (Use cartridges from an unexpired lot.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 581 Td (E-22 Host offline) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 581 Td (Results are queued. Check the network cable.) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 564 Td (E-30 Internal fault) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 229 564 Td (Restart the analyzer. If it persists, contact service.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 541 Td (If a problem is not listed here, or keeps coming back, stop testing and contact your local) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 526.5 Td (distributor or the manufacturer. Have the analyzer serial number and the error code ready.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 13 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 32 0 R >>
+endobj
+32 0 obj
+<< /Length 2804 >>
+stream
+0.267 0.475 0.584 rg 0 742 612 50 re f
+1 1 1 rg BT /F2 11 Tf 54 761 Td (GL-40 Glucose Analyzer - Instructions for Use) Tj ET
+1 1 1 rg BT /F1 10 Tf 470 761 Td (Version 3.0) Tj ET
+0.267 0.475 0.584 rg BT /F2 17 Tf 54 700 Td (12. Technical Specifications) Tj ET
+0.82 0.86 0.88 rg 54 688 504 1.2 re f
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 666 Td (Measuring range) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 666 Td (0.6 - 33.3 mmol/L \(10 - 600 mg/dL\)) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 649 Td (Sample volume) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 649 Td (1.2 microliters) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 632 Td (Test time) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 632 Td (About 6 seconds) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 615 Td (Hematocrit range) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 615 Td (20% - 65%) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 598 Td (Operating temperature) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 598 Td (15 C - 32 C) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 581 Td (Memory) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 581 Td (5,000 patient and 1,000 QC results) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 564 Td (Display) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 564 Td (5-inch color touch screen) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 547 Td (Connectivity) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 547 Td (Ethernet, USB, POCT1-A) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 530 Td (Power) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 530 Td (100-240 V AC, 50/60 Hz adapter) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 513 Td (Dimensions) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 513 Td (21 x 15 x 9 cm) Tj ET
+0.15 0.17 0.19 rg BT /F2 10.5 Tf 54 496 Td (Weight) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 224 496 Td (0.9 kg) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 473 Td (12.1 Interfering substances) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 455 Td (No significant interference was found at the following concentrations: ascorbic acid up to 3) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 440.5 Td (mg/dL, acetaminophen up to 20 mg/dL, uric acid up to 24 mg/dL, galactose up to 15 mg/dL.) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 426.0 Td (Maltose interferes above 8 mg/dL.) Tj ET
+0.15 0.17 0.19 rg BT /F2 12.5 Tf 54 406.5 Td (12.2 Warranty) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 388.5 Td (The analyzer is warranted against defects in materials and workmanship for 24 months from) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 374.0 Td (installation. The warranty does not cover damage from misuse, unapproved cleaning agents or) Tj ET
+0.15 0.17 0.19 rg BT /F1 10.5 Tf 54 359.5 Td (unauthorized repair.) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 54 36 Td (Page 14 of 14) Tj ET
+0.45 0.5 0.53 rg BT /F1 8.5 Tf 400 36 Td (CRV-IFU  |  Version 3.0) Tj ET
+endstream
+endobj
+xref
+0 33
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000211 00000 n 
+0000000308 00000 n 
+0000000410 00000 n 
+0000000546 00000 n 
+0000001774 00000 n 
+0000001910 00000 n 
+0000003777 00000 n 
+0000003914 00000 n 
+0000006902 00000 n 
+0000007040 00000 n 
+0000010221 00000 n 
+0000010359 00000 n 
+0000012782 00000 n 
+0000012920 00000 n 
+0000015613 00000 n 
+0000015751 00000 n 
+0000017901 00000 n 
+0000018039 00000 n 
+0000020265 00000 n 
+0000020403 00000 n 
+0000022276 00000 n 
+0000022414 00000 n 
+0000024518 00000 n 
+0000024656 00000 n 
+0000026668 00000 n 
+0000026806 00000 n 
+0000028552 00000 n 
+0000028690 00000 n 
+0000030638 00000 n 
+0000030776 00000 n 
+trailer
+<< /Size 33 /Root 1 0 R >>
+startxref
+33633
+%%EOF
