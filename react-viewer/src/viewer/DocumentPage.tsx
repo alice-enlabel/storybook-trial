@@ -17,7 +17,7 @@ import { Ratings } from './Ratings'
 import { RelatedDocs } from './RelatedDocs'
 import { SearchCard } from './SearchCard'
 import { SiteFooter } from './SiteFooter'
-import { useToast } from './Toast'
+import { copiedMessage, useToast } from './Toast'
 import type { ViewerDocument } from './document-data'
 
 type Popover = 'qr' | 'actions' | null
@@ -115,7 +115,7 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
 
   const copyCode = async (code: string) => {
     const ok = await copyText(code)
-    toast(ok ? `Copied ${code}` : 'Press Ctrl+C to copy')
+    toast(ok ? copiedMessage(code) : `Couldn't copy ${code}. Select the code to copy it.`)
   }
 
   const { meta } = doc

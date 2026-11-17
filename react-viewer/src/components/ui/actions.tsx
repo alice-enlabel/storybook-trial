@@ -107,8 +107,10 @@ const COPIED_MS = 1200
 
 /**
  * Figma "Copy Code": a monospace code value that copies itself on click.
- * Default: plain text. Hover/focus: grey fill and the copy icon appears.
- * Copied: eIFU teal with white text for 1.2s after a click.
+ * Desktop: plain text at rest. Hover/focus: grey fill and the copy icon
+ * appears. Copied: eIFU teal with white text for 1.2s after a click.
+ * Mobile/touch (no hover): the copy icon is always shown. A tap darkens the
+ * fill and icon for 1.2s while the caller's toast confirms the copy.
  */
 export function CopyCode({ code, kind = 'code', onCopy }: CopyCodeProps) {
   const [copiedAt, setCopiedAt] = useState(0)

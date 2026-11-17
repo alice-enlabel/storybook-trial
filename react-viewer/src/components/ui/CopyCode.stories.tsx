@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, fn, userEvent, within } from 'storybook/test'
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { copiedMessage, useToast } from '../../viewer/Toast'
 import { CopyCode, CopyCodeList } from './actions'
 
 /**
@@ -10,6 +11,13 @@ import { CopyCode, CopyCodeList } from './actions'
  * | Default | Monospace text, no fill, icon hidden | At rest |
  * | Hover / Focus | Grey fill, copy icon shown | Pointer over it or keyboard focus |
  * | Copied | eIFU teal fill, white text and icon | 1.2s after a click |
+ *
+ * Mobile and touch (under 900px wide, or no hover) have no hover state:
+ *
+ * | State | Looks | When |
+ * |---|---|---|
+ * | Default | Monospace text, no fill, copy icon always shown | At rest |
+ * | Tapped / Copied | Darker grey fill, darkened icon, toast "Copied {code} to your clipboard" | While pressed and 1.2s after the tap |
  *
  * `onCopy` does the clipboard write and the confirmation toast; the component
  * only shows the Copied state. Its accessible name is "Copy {kind} {code}".
@@ -83,4 +91,49 @@ export const List: Story = {
       />
     </div>
   ),
+}
+
+/** Phone: the app's toast confirms each copy, as on the document page. */
+function MobileDemo({ codes, kind, onCopy }: { codes: string[]; kind?: string; onCopy: (code: string) => void }) {
+  const { toast, toastRegion } = useToast()
+  return (
+    <div style={{ padding: 16 }}>
+      <CopyCodeList
+        codes={codes}
+        kind={kind}
+        onCopy={(code) => {
+          onCopy(code)
+          toast(copiedMessage(code))
+        }}
+      />
+      {toastRegion}
+    </div>
+  )
+}
+
+/**
+ * Mobile: no hover, so the copy icon is always visible. Tap a code: the chip
+ * and icon darken for 1.2s and a toast says it was copied to your clipboard.
+ */
+export const Mobile: Story = {
+  globals: { viewport: { value: 'iphone14', isRotated: false } },
+  parameters: { layout: 'fullscreen' },
+  render: (args) => (
+    <MobileDemo codes={['RPTR071128', 'RPTR071132', 'RPTR074120', 'RPTR074124']} kind={args.kind} onCopy={args.onCopy} />
+  ),
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: 'Copy product code RPTR071132' })
+    const icon = button.querySelector('.ui-icon')!
+    // The icon shows at rest, without hover.
+    await expect(getComputedStyle(icon).opacity).toBe('1')
+    const restIcon = getComputedStyle(icon).color
+    await userEvent.click(button)
+    await expect(args.onCopy).toHaveBeenCalledWith('RPTR071132')
+    await expect(button).toHaveClass('ui-copy-code--copied')
+    // Darkened, not the desktop teal fill.
+    await waitFor(() => expect(getComputedStyle(button).backgroundColor).toBe('rgb(197, 208, 215)'))
+    await waitFor(() => expect(getComputedStyle(icon).color).not.toBe(restIcon))
+    await expect(await canvas.findByRole('status')).toHaveTextContent('Copied RPTR071132 to your clipboard')
+  },
 }
