@@ -19,6 +19,7 @@ export interface Skin {
 
 export const SKINS: Skin[] = [
   { id: 'eifu', title: 'eIFU (base)', description: 'tokens.css with no override', css: '' },
+  { id: 'sample-clinical-navy', title: 'Sample: Clinical Navy', description: 'Navy brand, serif face', css: clinicalNavy },
   { id: 'sample-warm-rounded', title: 'Sample: Warm Rounded', description: 'Warm brand and neutrals, large radii', css: warmRounded },
   { id: 'sample-high-contrast', title: 'Sample: High Contrast', description: 'Black brand, white surfaces, square corners', css: highContrast },
 ]

@@ -120,6 +120,8 @@ function skinStory(skin: Skin): Story {
   }
 }
 
-export const Eifu = skinStory(SKINS[0])
-export const WarmRounded = skinStory(SKINS[1])
-export const HighContrast = skinStory(SKINS[2])
+const skin = (id: string) => SKINS.find((s) => s.id === id)!
+
+export const Eifu = skinStory(skin('eifu'))
+export const ClinicalNavy = skinStory(skin('sample-clinical-navy'))
+export const HighContrast = skinStory(skin('sample-high-contrast'))
