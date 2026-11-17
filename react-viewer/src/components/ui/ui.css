@@ -320,6 +320,32 @@
   opacity: 1;
 }
 
+/* Mobile/touch: the copy icon is always shown so tap-to-copy is discoverable.
+   No fill at rest or after focus; darken only while pressed and on copy. */
+@media (max-width: 899.98px), (hover: none) {
+  .ui-copy-code {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ui-copy-code .ui-icon {
+    opacity: 1;
+  }
+  .ui-copy-code:hover,
+  .ui-copy-code:focus-visible {
+    background: transparent;
+    color: #3b4248;
+  }
+  .ui-copy-code:active {
+    background: #c5d0d7;
+    color: var(--color-neutral-strongest);
+  }
+  .ui-copy-code--copied,
+  .ui-copy-code--copied:hover,
+  .ui-copy-code--copied:focus-visible {
+    background: var(--color-brand-primary);
+    color: var(--color-text-on-brand);
+  }
+}
+
 /* Key-Value Row --------------------------------------------------------- */
 .ui-kv-list {
   margin: 0;

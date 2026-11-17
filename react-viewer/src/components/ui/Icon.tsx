@@ -12,6 +12,7 @@ import menu from '../../assets/icons/menu.svg'
 import moreVertical from '../../assets/icons/more-vertical.svg'
 import print from '../../assets/icons/print.svg'
 import qrCode from '../../assets/icons/qr-code.svg'
+import requestPaperCopy from '../../assets/icons/request-paper-copy.svg'
 import search from '../../assets/icons/search.svg'
 
 // Product icons come from the prototype's assets/icon-*.svg (32px square);
@@ -40,6 +41,7 @@ const ICONS = {
   'more-vertical': { src: moreVertical, w: 1, h: 1 },
   print: { src: print, w: 1, h: 1 },
   'qr-code': { src: qrCode, w: 1, h: 1 },
+  'request-paper-copy': { src: requestPaperCopy, w: 1, h: 1 },
   'tool-thumbnails': tool('thumbnails'),
   'tool-contents': tool('contents'),
   'tool-search': tool('search'),

@@ -75,6 +75,7 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
     { id: 'favorite', label: favorite ? 'Remove from favorites' : 'Add to favorites', icon: favorite ? 'favorite-filled' : 'favorite' },
     { id: 'print', label: 'Print', icon: 'print' },
     { id: 'download', label: 'Download', icon: 'download' },
+    { id: 'paper', label: 'Request paper copy', icon: 'request-paper-copy' },
     { id: 'email', label: 'Email document', icon: 'email' },
     { id: 'copy', label: 'Copy link', icon: 'copy-link' },
   ]
@@ -98,6 +99,9 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
         toast('Downloading eIFU Comprehensive Guide.pdf (319 KB)')
         break
       }
+      case 'paper':
+        toast('Paper copy requested. It will ship within 7 days.')
+        break
       case 'email':
         toast('Opening your email app…')
         window.location.href = `mailto:?subject=${encodeURIComponent(doc.title)}&body=${encodeURIComponent(window.location.href)}`

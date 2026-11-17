@@ -141,6 +141,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* mobile toolbar */
 .bar-m { gap: 2px; padding: 6px 6px; overflow-x: auto; scrollbar-width: none; }
 .bar-m .tb { width: 34px; height: 38px; }
+.bar-m .tb:focus-visible { outline-offset: -2px; } /* ring inside the button: the scrolling bar would clip it at its ends */
 .bar-m .tb svg { width: 21px; height: 21px; }
 .bar-m .pg { gap: 12px; margin: 0 6px; }
 .bar-m .pg input { width: 64px; height: 36px; padding: 0 10px; }
@@ -239,6 +240,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .codes button:hover svg, .codes button:focus-visible svg { opacity: 1; }
 .codes button.copied { background: var(--eifu-teal); color: #fff; }
 .codes button.copied svg { opacity: 1; color: #fff; }
+/* mobile/touch: the copy icon is always shown so tap-to-copy is discoverable; no fill at rest or after focus, darken only while pressed and on copy */
+@media (max-width: 899.98px), (hover: none) {
+  .codes button { -webkit-tap-highlight-color: transparent; }
+  .codes button svg { opacity: 1; }
+  .codes button:hover, .codes button:focus-visible { background: transparent; color: #3B4248; }
+  .codes button:active { background: #C5D0D7; color: var(--text); }
+  .codes button.copied { background: var(--eifu-teal); color: #fff; }
+}
 .notice { border: 1px solid var(--borders); border-radius: 4px; padding: 12px; font-size: 14px; line-height: 1.35; white-space: pre-line; margin-top: 8px; }
 .pnx { border: 1px solid var(--borders); border-radius: 8px; padding: 14px 16px; margin-top: 10px; font-size: 14px; line-height: 1.45; background: #fff; }
 .pnx h4 { margin: 0 0 4px; font-size: 16px; line-height: 1.3; }
@@ -276,6 +285,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .doc-card { width: 190px; flex-shrink: 0; display: flex; flex-direction: column; border: 1px solid #000; border-radius: 5px 5px 10px 10px; overflow: clip; scroll-snap-align: start; transition: translate .15s; }
 .doc-card:hover { translate: 0 -3px; }
 .doc-card .open { display: block; width: 100%; aspect-ratio: 158 / 220; }
+/* focus ring goes on the whole card (the card clips its children, so the cover button cannot draw its own); drawn inside so the scrolling row cannot clip it */
+.doc-card .open:focus-visible { outline: none; }
+.doc-card:has(.open:focus-visible) { outline: 2px solid var(--eifu-teal); outline-offset: -2px; }
 .doc-card .open img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .doc-card .card-body { border-top: 1px solid #000; padding: 10px; display: grid; gap: 5px; background: #fff; }
 .doc-card .crumb { font-size: 12.5px; color: #343434; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

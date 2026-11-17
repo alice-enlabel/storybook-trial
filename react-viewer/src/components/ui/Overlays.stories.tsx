@@ -15,6 +15,7 @@ const meta = {
       { id: 'favorite', label: 'Add to favorites', icon: 'favorite' },
       { id: 'print', label: 'Print', icon: 'print' },
       { id: 'download', label: 'Download', icon: 'download' },
+      { id: 'paper', label: 'Request paper copy', icon: 'request-paper-copy' },
       { id: 'email', label: 'Email document', icon: 'email' },
       { id: 'copy', label: 'Copy link', icon: 'copy-link' },
     ],
