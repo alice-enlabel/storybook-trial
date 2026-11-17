@@ -11,6 +11,8 @@ const config: StorybookConfig = {
     "@storybook/addon-docs",
     "@storybook/addon-mcp"
   ],
-  "framework": "@storybook/react-vite"
+  "framework": "@storybook/react-vite",
+  // public/ holds the sample PDF the full-page stories load.
+  "staticDirs": ["../public"]
 };
 export default config;

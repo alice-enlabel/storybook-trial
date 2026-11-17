@@ -1,0 +1,20 @@
+/* SAMPLE SST, not a real subscriber. Near-black brand, pure white surfaces and
+ * square corners: the accessibility-first end of what a subscriber might ask. */
+:root {
+  --color-brand-primary: #111111;
+  --color-brand-primary-strong: #000000;
+  --color-brand-tint: #ececec;
+  --color-brand-tint-strong: #d0d0d0;
+
+  --color-neutral-base: #ffffff;
+  --color-neutral-weak: #8a8a8a;
+  --color-neutral-medium: #4a4a4a;
+  --color-cool-weakest: #ffffff;
+  --color-cool-weaker: #8a8a8a;
+  --color-cool-strong: #333333;
+  --color-cool-stronger: #111111;
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+}

@@ -1,0 +1,49 @@
+/*
+ * SST theme template. Copy to <sst-id>.css, register it in ./index.ts, and
+ * uncomment only the tokens this subscriber changes.
+ *
+ * Contract: an SST theme sets design tokens on :root and nothing else.
+ * - Override the semantic layer (brand / neutral / cool) and the brand-level
+ *   tokens (font family, radius). Usage tokens (--color-text-*, --color-surface-*,
+ *   ...) derive from these, so the whole viewer follows.
+ * - Override a usage token only when the subscriber needs one surface to differ
+ *   from what the semantic layer gives it.
+ * - Never target component classes (.btn, .stage__panel, ...). Those are
+ *   internal to the viewer and change without notice; tokens are the API.
+ * - Sizes and type scale switch at 900px in tokens.css. A theme that changes
+ *   them must repeat its own @media (min-width: 900px) block.
+ *
+ * The file is loaded after tokens.css, the same order production uses, so a
+ * plain :root rule wins.
+ */
+:root {
+  /* brand */
+  /* --color-brand-primary: #447995; */        /* buttons, links, active tabs, icons */
+  /* --color-brand-primary-strong: #3b6e8f; */ /* link text, pressed states */
+  /* --color-brand-tint: #d9e5ef; */           /* subtle brand surfaces */
+  /* --color-brand-tint-strong: #bfd2e0; */    /* hover / selected surfaces */
+  /* --color-brand-accent: #96031e; */
+
+  /* neutral */
+  /* --color-neutral-base: #fefefe; */         /* page and card background */
+  /* --color-neutral-weakest: #f3f4f6; */
+  /* --color-neutral-weaker: #e0e0e0; */
+  /* --color-neutral-weak: #cecece; */         /* default borders */
+  /* --color-neutral-medium: #7c7c7c; */       /* control borders */
+  /* --color-neutral-stronger: #202020; */     /* primary text */
+
+  /* cool neutral */
+  /* --color-cool-weakest: #f6f9fc; */         /* canvas */
+  /* --color-cool-weaker: #e4e9ec; */          /* subtle borders */
+  /* --color-cool-strong: #5b6b75; */          /* secondary text */
+  /* --color-cool-stronger: #3d4a52; */        /* body text */
+
+  /* brand-level */
+  /* --font-family: Arial, Helvetica, sans-serif; */
+  /* --radius-sm: 6px; */
+  /* --radius-md: 8px; */
+  /* --radius-lg: 16px; */
+
+  /* PDF backdrop */
+  /* --color-surface-viewer: #e6e6e6; */
+}

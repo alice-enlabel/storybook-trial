@@ -1,0 +1,11 @@
+/* SAMPLE SST, not a real subscriber. Navy brand with a serif face: checks that
+ * a darker brand and a different font flow through every component. */
+:root {
+  --color-brand-primary: #1f3a68;
+  --color-brand-primary-strong: #162b4f;
+  --color-brand-tint: #dde4f0;
+  --color-brand-tint-strong: #b9c7df;
+  --color-brand-accent: #b4232f;
+
+  --font-family: Georgia, 'Times New Roman', serif;
+}
