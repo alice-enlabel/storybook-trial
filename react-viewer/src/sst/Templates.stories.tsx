@@ -62,7 +62,7 @@ export const Composer: Story = {
       name: 'Draft SST',
       description: 'Scratch recipe for composing a new SST.',
       skin: 'eifu',
-      header: { type: 'header', props: { variant: 'links', items: ['Home', 'Favorites', 'Recent'], sites: ['Draft SST'] } },
+      header: { type: 'header', props: { variant: 'links', items: ['Home', 'Favorites', 'Recent'] } },
       sections: [
         { type: 'hero', props: { variant: 'brand', title: 'Welcome to the eIFU Website' }, children: [{ type: 'search', props: { variant: 'bar', fields: ['REF number'] } }] },
         { type: 'labelGuide', props: { heading: 'How to Read Product Labels', text: ['Configurable instructions.'] } },

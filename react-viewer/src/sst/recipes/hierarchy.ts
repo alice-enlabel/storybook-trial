@@ -1,5 +1,5 @@
 import type { SstRecipe } from '../recipe'
-import { FOOTER, SITE_NAMES } from './content'
+import { FOOTER } from './content'
 
 /** Live "Hierarchy" on subscriber.eifualpha.com, rebuilt from blocks. */
 export const hierarchy: SstRecipe = {
@@ -7,7 +7,7 @@ export const hierarchy: SstRecipe = {
   name: 'Hierarchy (live)',
   description: 'Title header, barcode scan beside a filtered text search, publisher hierarchy tree.',
   skin: 'eifu',
-  header: { type: 'header', props: { variant: 'title', title: 'Hierarchy', sites: SITE_NAMES, currentSite: 'Hierarchy', signIn: false } },
+  header: { type: 'header', props: { variant: 'title', title: 'Hierarchy', signIn: false } },
   sections: [
     {
       type: 'row',

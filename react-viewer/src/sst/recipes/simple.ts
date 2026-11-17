@@ -9,7 +9,7 @@ export const simple: SstRecipe = {
   skin: 'eifu',
   header: {
     type: 'header',
-    props: { variant: 'links', items: ['Home', 'Favorites', 'Recent', 'Setup'], sites: ['Simple', 'New SST'], currentSite: 'Simple', menu: false },
+    props: { variant: 'links', items: ['Home', 'Favorites', 'Recent', 'Setup'], menu: false },
   },
   sections: [
     { type: 'hero', props: { variant: 'wordmark', wordmark: 'BIOHEART' } },

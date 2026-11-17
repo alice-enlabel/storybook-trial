@@ -78,15 +78,6 @@
   gap: var(--spacing-12);
   margin-left: auto;
 }
-.sst-header__sites select {
-  height: 34px;
-  padding: 0 var(--spacing-8);
-  border: 1px solid var(--color-border-control);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-default);
-  color: var(--color-text-primary);
-  font: var(--type-caption);
-}
 .sst-header__menu {
   display: grid;
   place-items: center;
