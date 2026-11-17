@@ -17,7 +17,10 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Secondary action, e.g. "Show All Fields". */
+/**
+ * Secondary action, e.g. "Show All Fields". It has no disabled state: when the
+ * doc info panel has no extra metadata to reveal, the button is not rendered.
+ */
 export const Outline: Story = { args: { variant: 'outline', children: 'Show All Fields' } }
 
 /** Low-emphasis action. */
@@ -38,5 +41,3 @@ export const PrimaryBlock: Story = {
   args: { variant: 'primary', icon: 'search', children: 'Search', block: true },
   parameters: { layout: 'padded' },
 }
-
-export const Disabled: Story = { args: { variant: 'outline', disabled: true } }

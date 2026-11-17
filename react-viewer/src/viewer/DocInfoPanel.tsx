@@ -116,9 +116,11 @@ export function DocInfoPanel({ doc, onClose, onCopyCode }: DocInfoPanelProps) {
               </KeyValueRow>
             ))}
           </KeyValueList>
-          <Button variant="outline" onClick={() => setShowAll((s) => !s)} aria-expanded={showAll} className="docinfo__show-all">
-            {showAll ? 'Show Fewer Fields' : 'Show All Fields'}
-          </Button>
+          {doc.extraMetadata.length > 0 && (
+            <Button variant="outline" onClick={() => setShowAll((s) => !s)} aria-expanded={showAll} className="docinfo__show-all">
+              {showAll ? 'Show Fewer Fields' : 'Show All Fields'}
+            </Button>
+          )}
           <Accordion title="Product Codes" count={doc.productCodes.length}>
             <CopyCodeList codes={doc.productCodes} kind="product code" onCopy={onCopyCode} />
           </Accordion>
