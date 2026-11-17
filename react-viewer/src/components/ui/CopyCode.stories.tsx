@@ -38,6 +38,40 @@ export const Copied: Story = {
   },
 }
 
+/**
+ * Code length varies by enterprise and product. Columns are as wide as the
+ * longest code and stretch to fill the container, and codes that don't fit
+ * move to the next row. Resize the canvas to see the column count change.
+ */
+export const MixedLengths: Story = {
+  render: (args) => (
+    <div style={{ display: 'grid', gap: 24 }}>
+      {[
+        ['A12', 'B7', 'C405', 'D9', 'E3310', 'F2', 'G88'],
+        ['RPTR071128', 'RPTR071132', 'RPTR074120', 'RPTR074124', 'RPTR074128'],
+        ['MDX-4471-02-EU', 'MDX-4471-02-US', 'MDX-4471-10-JP', 'MDX-88-A'],
+      ].map((codes) => (
+        <div key={codes[0]} style={{ maxWidth: 420, outline: '1px dashed #0b8dc6' }}>
+          <CopyCodeList codes={codes} kind={args.kind} onCopy={args.onCopy} />
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const list of canvasElement.querySelectorAll('.ui-copy-code-list')) {
+      const box = list.getBoundingClientRect()
+      const items = [...list.querySelectorAll('li')].map((li) => li.getBoundingClientRect())
+      const firstRow = items.filter((r) => Math.abs(r.top - items[0].top) < 1)
+      // The first row's codes fill the container width.
+      await expect(Math.round(firstRow[firstRow.length - 1].right)).toBe(Math.round(box.right))
+      // No code is clipped: each button fits its text.
+      for (const button of list.querySelectorAll('button')) {
+        await expect(button.scrollWidth).toBeLessThanOrEqual(button.clientWidth)
+      }
+    }
+  },
+}
+
 /** Several codes wrap onto as many lines as the container needs. */
 export const List: Story = {
   render: (args) => (

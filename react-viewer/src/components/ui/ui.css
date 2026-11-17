@@ -274,13 +274,31 @@
 }
 
 /* Copy Code ------------------------------------------------------------- */
+/* Equal columns that fill the container. Each column is as wide as the
+   longest code (--copy-code-chars, set by CopyCodeList): mono text in ch +
+   16 side padding + 8 gap + 1.25em icon. As many columns fit as the width
+   allows, they stretch to fill the row, and codes that don't fit move to the
+   next row. The list uses the code font so 1ch and 1em match the buttons. */
 .ui-copy-code-list {
-  display: flex;
-  flex-wrap: wrap;
+  --copy-code-min: calc(var(--copy-code-chars, 10) * 1ch + 24px + 1.25em);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--copy-code-min)), 1fr));
   gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
+  font: 14px/1.4 ui-monospace, Consolas, monospace;
+}
+.ui-copy-code-list > li {
+  display: flex;
+  min-width: 0;
+}
+.ui-copy-code-list .ui-copy-code {
+  flex: 1;
+  min-width: 0;
+  justify-content: space-between;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 .ui-copy-code {
   display: inline-flex;
