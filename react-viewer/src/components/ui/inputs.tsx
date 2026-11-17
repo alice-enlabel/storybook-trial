@@ -1,21 +1,66 @@
 import { useEffect, useId, useRef, useState, type InputHTMLAttributes, type KeyboardEvent } from 'react'
-import { Icon } from './Icon'
+import { Icon, type IconName } from './Icon'
 
 type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string
   showLabel?: boolean
+  /** Icon inside the box, before the text (e.g. `search` for SST search bars). */
+  leadingIcon?: IconName
+  /** Shows a scan-barcode button inside the box, after the text. */
+  scan?: boolean
+  onScan?: () => void
+  /** Accessible name of the scan button. Defaults to "Scan barcode for {label}". */
+  scanLabel?: string
+  /** Ids for the wrapper and label, so SST blocks keep their `eifu_*` styling hooks. */
+  rootId?: string
+  labelId?: string
 }
 
-/** Figma "Text Field" (250:159): labelled single-line text input. */
-export function TextField({ label, showLabel = true, className, id, ...rest }: TextFieldProps) {
+/**
+ * Figma "Text Field" (250:159): labelled single-line text input.
+ * With `leadingIcon` and/or `scan` it becomes the search bar SSTs share:
+ * icon and placeholder left-aligned, scan-barcode button on the right.
+ */
+export function TextField({
+  label,
+  showLabel = true,
+  leadingIcon,
+  scan = false,
+  onScan,
+  scanLabel,
+  rootId,
+  labelId,
+  className,
+  id,
+  ...rest
+}: TextFieldProps) {
   const autoId = useId()
   const inputId = id ?? autoId
+  const adorned = Boolean(leadingIcon) || scan
   return (
-    <div className={['ui-field', className].filter(Boolean).join(' ')}>
-      <label htmlFor={inputId} className={showLabel ? 'ui-field__label' : 'visually-hidden'}>
+    <div id={rootId} className={['ui-field', className].filter(Boolean).join(' ')}>
+      <label id={labelId} htmlFor={inputId} className={showLabel ? 'ui-field__label' : 'visually-hidden'}>
         {label}
       </label>
-      <input id={inputId} className="ui-field__control" {...rest} />
+      {adorned ? (
+        <div className="ui-field__control ui-field__control--adorned" data-disabled={rest.disabled || undefined}>
+          {leadingIcon && <Icon name={leadingIcon} className="ui-field__lead" />}
+          <input id={inputId} className="ui-field__input" {...rest} />
+          {scan && (
+            <button
+              type="button"
+              className="ui-field__scan"
+              aria-label={scanLabel ?? `Scan barcode for ${label}`}
+              disabled={rest.disabled}
+              onClick={onScan}
+            >
+              <Icon name="barcode-scan" />
+            </button>
+          )}
+        </div>
+      ) : (
+        <input id={inputId} className="ui-field__control" {...rest} />
+      )}
     </div>
   )
 }
