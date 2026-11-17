@@ -4,8 +4,6 @@
  */
 import type { FooterProps } from '../blocks/Footer'
 
-export const SITE_NAMES = ['Classic', 'SimpleModernSST', 'Hierarchy', 'Simple', 'New SST']
-
 export const FOOTER: FooterProps['columns'] = [
   { heading: 'About Us', links: ['Contact Information', 'Business', 'About', 'Partners'] },
   { heading: 'eIFU', links: ['Terms & Conditions', 'Footer notice placeholder', 'Help', 'Become a Publisher'] },

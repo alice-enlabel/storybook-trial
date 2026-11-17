@@ -1,5 +1,5 @@
 import type { SstRecipe } from '../recipe'
-import { FOOTER, SITE_NAMES } from './content'
+import { FOOTER } from './content'
 
 /** Live "SimpleModernSST" on subscriber.eifualpha.com, rebuilt from blocks. */
 export const simpleModern: SstRecipe = {
@@ -7,7 +7,7 @@ export const simpleModern: SstRecipe = {
   name: 'SimpleModernSST (live)',
   description: 'Brand bar header, brand hero with one search bar, label guide.',
   skin: 'eifu',
-  header: { type: 'header', props: { variant: 'bar', title: 'SimpleModernSST', sites: SITE_NAMES, currentSite: 'SimpleModernSST', menu: true } },
+  header: { type: 'header', props: { variant: 'bar', title: 'SimpleModernSST', menu: true } },
   sections: [
     {
       type: 'hero',

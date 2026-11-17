@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Icon, type IconName } from './Icon'
 
 const PRODUCT: IconName[] = ['info', 'qr-code', 'more-vertical', 'favorite', 'favorite-filled', 'print', 'download', 'email', 'copy-link']
-const UI: IconName[] = ['arrow-left', 'chevron-down', 'close', 'menu', 'search']
+const UI: IconName[] = ['arrow-left', 'barcode-scan', 'chevron-down', 'close', 'menu', 'search']
 
 const meta = {
   title: 'Generic UI/Icons',

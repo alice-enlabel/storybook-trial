@@ -4,7 +4,7 @@ import { FOOTER, HIERARCHY, LABEL_GUIDE_TEXT } from './content'
 
 const header: SstRecipe['header'] = {
   type: 'header',
-  props: { variant: 'glass', items: ['English', 'USA', 'For Patients'], sites: ['New SST', 'Simple'], currentSite: 'New SST' },
+  props: { variant: 'glass', items: ['English', 'USA', 'For Patients'] },
 }
 
 const heroSearch: BlockSpec = {

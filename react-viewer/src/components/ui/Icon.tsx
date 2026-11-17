@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import arrowLeft from '../../assets/icons/arrow-left.svg'
+import barcodeScan from '../../assets/icons/barcode-scan.svg'
 import chevronDown from '../../assets/icons/chevron-down.svg'
 import close from '../../assets/icons/close.svg'
 import copyLink from '../../assets/icons/copy-link.svg'
@@ -28,6 +29,7 @@ const tool = (name: string) => ({ src: toolbar[`../../assets/icons/toolbar/${nam
 
 const ICONS = {
   'arrow-left': { src: arrowLeft, w: 0.9, h: 0.9 },
+  'barcode-scan': { src: barcodeScan, w: 1, h: 1 },
   'chevron-down': { src: chevronDown, w: 0.59, h: 0.34 },
   close: { src: close, w: 0.58, h: 0.58 },
   menu: { src: menu, w: 0.94, h: 0.66 },

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Icon } from '../../components/ui/Icon'
+import { TextField } from '../../components/ui/inputs'
 import { blockParts, blockRoot } from '../parts'
 
 export type SearchBlockProps = {
@@ -63,29 +64,20 @@ export function SearchBlock({
         )}
         <div className="sst-search__inputs" id={p('form_inputs_search')}>
           {shown.map((label, i) => (
-            <div className="sst-search__field" key={label} id={p(`input_text_${i}`)}>
-              <label
-                htmlFor={p(`input_text_${i}_control`)}
-                id={p(`input_text_${i}_label`)}
-                className={variant === 'filtered' ? 'sst-search__label' : 'visually-hidden'}
-              >
-                {label}
-              </label>
-              <div className="sst-search__control">
-                {variant === 'bar' && <Icon name="search" className="sst-search__lead" />}
-                <input
-                  id={p(`input_text_${i}_control`)}
-                  value={values[i]}
-                  placeholder={variant === 'bar' ? label : undefined}
-                  onChange={(e) => set(i, e.target.value)}
-                />
-                {barcode && variant !== 'card' && (
-                  <button type="button" className="sst-search__barcode" aria-label={`Scan barcode for ${label}`}>
-                    <BarcodeGlyph />
-                  </button>
-                )}
-              </div>
-            </div>
+            <TextField
+              key={label}
+              className="sst-search__field"
+              rootId={p(`input_text_${i}`)}
+              id={p(`input_text_${i}_control`)}
+              labelId={p(`input_text_${i}_label`)}
+              label={label}
+              showLabel={variant === 'filtered'}
+              leadingIcon={variant === 'bar' ? 'search' : undefined}
+              scan={barcode && variant !== 'card'}
+              value={values[i]}
+              placeholder={variant === 'bar' ? label : undefined}
+              onChange={(e) => set(i, e.target.value)}
+            />
           ))}
           <button
             type="submit"
@@ -114,11 +106,3 @@ export function SearchBlock({
   )
 }
 
-function BarcodeGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M3 7V4h3M18 4h3v3M21 17v3h-3M6 20H3v-3" />
-      <path d="M7 8v8M10 8v8M12.5 8v8M15 8v8M17 8v8" />
-    </svg>
-  )
-}

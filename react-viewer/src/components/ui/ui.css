@@ -189,6 +189,67 @@
 .ui-field__control::placeholder {
   color: var(--color-text-secondary);
 }
+/* Adorned control: leading icon and/or trailing scan button inside the box.
+   The box keeps the control's border and size; the input inside is bare. */
+.ui-field__control--adorned {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: 0 var(--spacing-4) 0 var(--spacing-16);
+  --icon-size: 20px;
+}
+.ui-field__control--adorned:focus-within {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: 1px;
+}
+.ui-field__control--adorned[data-disabled] {
+  background: var(--color-surface-muted);
+}
+.ui-field__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  outline: none;
+}
+.ui-field__input::placeholder {
+  color: var(--color-text-secondary);
+}
+.ui-field__lead {
+  flex-shrink: 0;
+  color: var(--color-icon-default);
+}
+.ui-field__scan {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-icon-default);
+  cursor: pointer;
+  transition: color var(--duration-fast);
+  --icon-size: 24px;
+}
+.ui-field__scan:hover:not(:disabled) {
+  color: var(--color-icon-accent);
+}
+.ui-field__scan:focus-visible {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: -2px;
+}
+.ui-field__scan:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 .ui-select__trigger {
   display: flex;
   align-items: center;
