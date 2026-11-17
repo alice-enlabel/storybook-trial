@@ -7,7 +7,6 @@
  * of <head>, which reproduces that load order.
  */
 import highContrast from './sample-high-contrast.css?inline'
-import clinicalNavy from './sample-clinical-navy.css?inline'
 import warmRounded from './sample-warm-rounded.css?inline'
 
 export interface Skin {
@@ -20,7 +19,6 @@ export interface Skin {
 
 export const SKINS: Skin[] = [
   { id: 'eifu', title: 'eIFU (base)', description: 'tokens.css with no override', css: '' },
-  { id: 'sample-clinical-navy', title: 'Sample: Clinical Navy', description: 'Navy brand, serif face', css: clinicalNavy },
   { id: 'sample-warm-rounded', title: 'Sample: Warm Rounded', description: 'Warm brand and neutrals, large radii', css: warmRounded },
   { id: 'sample-high-contrast', title: 'Sample: High Contrast', description: 'Black brand, white surfaces, square corners', css: highContrast },
 ]

@@ -121,6 +121,5 @@ function skinStory(skin: Skin): Story {
 }
 
 export const Eifu = skinStory(SKINS[0])
-export const ClinicalNavy = skinStory(SKINS[1])
-export const WarmRounded = skinStory(SKINS[2])
-export const HighContrast = skinStory(SKINS[3])
+export const WarmRounded = skinStory(SKINS[1])
+export const HighContrast = skinStory(SKINS[2])
