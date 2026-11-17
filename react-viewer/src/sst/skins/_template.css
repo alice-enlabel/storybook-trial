@@ -1,8 +1,9 @@
 /*
- * SST theme template. Copy to <sst-id>.css, register it in ./index.ts, and
- * uncomment only the tokens this subscriber changes.
+ * Skin template. Copy to <skin-id>.css, register it in ./index.ts, and
+ * uncomment only the tokens this subscriber changes. Layout and content are the
+ * recipe's job (../recipes); a skin is colour, type and shape only.
  *
- * Contract: an SST theme sets design tokens on :root and nothing else.
+ * Contract: a skin sets design tokens on :root and nothing else.
  * - Override the semantic layer (brand / neutral / cool) and the brand-level
  *   tokens (font family, radius). Usage tokens (--color-text-*, --color-surface-*,
  *   ...) derive from these, so the whole viewer follows.
@@ -10,7 +11,7 @@
  *   from what the semantic layer gives it.
  * - Never target component classes (.btn, .stage__panel, ...). Those are
  *   internal to the viewer and change without notice; tokens are the API.
- * - Sizes and type scale switch at 900px in tokens.css. A theme that changes
+ * - Sizes and type scale switch at 900px in tokens.css. A skin that changes
  *   them must repeat its own @media (min-width: 900px) block.
  *
  * The file is loaded after tokens.css, the same order production uses, so a

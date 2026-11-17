@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
-import { DocumentPage } from '../viewer/DocumentPage'
-import { sampleDocument } from '../viewer/document-data'
 import baseTokens from '../styles/tokens.css?inline'
-import { SST_THEMES, type SstTheme } from './sst'
+import { newSst } from './recipes'
+import { SKINS, type Skin } from './skins'
+import { SstPage } from './SstPage'
 
 /*
- * SST themes are CSS only: each one overrides design tokens (see sst/_template.css).
- * The toolbar's SST switch re-themes every story; the stories here are the
- * per-theme checks that run in CI (vitest + a11y), one full page per SST.
+ * Skins are the colour / font / radius layer of an SST: token overrides only
+ * (skins/_template.css). The toolbar's Skin switch re-skins every story; these
+ * stories are the per-skin checks that run in CI (vitest + a11y).
  */
 
 /** `--name: value` pairs declared in a CSS string, first occurrence wins. */
@@ -30,8 +30,8 @@ function hexToRgb(hex: string): string {
   return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`
 }
 
-function TokenReport({ theme }: { theme: SstTheme }) {
-  const overrides = declaredTokens(theme.css)
+function TokenReport({ skin }: { skin: Skin }) {
+  const overrides = declaredTokens(skin.css)
   const root = getComputedStyle(document.documentElement)
   const rows = [...BASE.keys()].map((name) => ({
     name,
@@ -39,36 +39,31 @@ function TokenReport({ theme }: { theme: SstTheme }) {
     resolved: root.getPropertyValue(name).trim(),
     overridden: overrides.has(name),
   }))
-  const isColor = (name: string) => name.startsWith('--color-')
 
   return (
     <div style={{ font: '14px/1.4 system-ui, sans-serif', color: '#202020', padding: 16 }}>
-      <h1 style={{ font: '700 20px system-ui, sans-serif', margin: '0 0 4px' }}>{theme.title}</h1>
+      <h1 style={{ font: '700 20px system-ui, sans-serif', margin: '0 0 4px' }}>{skin.title}</h1>
       <p style={{ margin: '0 0 16px', color: '#5b6b75' }}>
-        {theme.description}. {overrides.size} of {BASE.size} tokens overridden. Switch SST in the toolbar.
+        {skin.description}. {overrides.size} of {BASE.size} tokens overridden. Switch skin in the toolbar.
       </p>
       <table style={{ borderCollapse: 'collapse', width: '100%', maxWidth: 900 }}>
         <thead>
           <tr style={{ textAlign: 'left', borderBottom: '2px solid #cecece' }}>
             <th style={{ padding: 6 }}>Token</th>
             <th style={{ padding: 6 }}>eIFU base</th>
-            <th style={{ padding: 6 }}>Resolved in this SST</th>
+            <th style={{ padding: 6 }}>Resolved in this skin</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr
-              key={r.name}
-              data-overridden={r.overridden || undefined}
-              style={{ borderBottom: '1px solid #e4e9ec', background: r.overridden ? '#fff6d6' : undefined }}
-            >
+            <tr key={r.name} style={{ borderBottom: '1px solid #e4e9ec', background: r.overridden ? '#fff6d6' : undefined }}>
               <td style={{ padding: 6, fontFamily: 'ui-monospace, monospace' }}>
                 {r.name}
-                {r.overridden && <strong> · SST</strong>}
+                {r.overridden && <strong> · skin</strong>}
               </td>
               <td style={{ padding: 6, fontFamily: 'ui-monospace, monospace' }}>{r.base}</td>
               <td style={{ padding: 6, fontFamily: 'ui-monospace, monospace' }}>
-                {isColor(r.name) && (
+                {r.name.startsWith('--color-') && (
                   <span
                     aria-hidden
                     style={{
@@ -88,47 +83,44 @@ function TokenReport({ theme }: { theme: SstTheme }) {
 }
 
 const meta = {
-  title: 'SST Themes',
+  title: 'SST/Skins',
   parameters: { layout: 'fullscreen' },
 } satisfies Meta
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Every token with its base value and what the toolbar's SST resolves it to. Overrides are highlighted. */
+/** Every token with its base value and what the toolbar's skin resolves it to. Overrides are highlighted. */
 export const Tokens: Story = {
-  render: (_args, { globals }) => (
-    <TokenReport theme={SST_THEMES.find((t) => t.id === globals.sst) ?? SST_THEMES[0]} />
-  ),
+  render: (_args, { globals }) => <TokenReport skin={SKINS.find((s) => s.id === globals.skin) ?? SKINS[0]} />,
 }
 
-/** Full desktop page in one SST. The play test proves the SST's brand colour reaches a real component. */
-function pageStory(theme: SstTheme): Story {
+/** The New SST home in one skin. The play test proves the skin's brand colour reaches a block. */
+function skinStory(skin: Skin): Story {
   return {
-    name: theme.title,
-    globals: { sst: theme.id, viewport: { value: 'desktop', isRotated: false } },
-    render: () => <DocumentPage doc={sampleDocument} />,
+    name: skin.title,
+    globals: { skin: skin.id, viewport: { value: 'desktop', isRotated: false } },
+    render: () => <SstPage recipe={newSst} />,
     play: async ({ canvasElement, step }) => {
       const canvas = within(canvasElement)
-      const brand = declaredTokens(theme.css).get('--color-brand-primary') ?? BASE.get('--color-brand-primary')!
+      const brand = declaredTokens(skin.css).get('--color-brand-primary') ?? BASE.get('--color-brand-primary')!
 
-      await step('SST stylesheet is active and loaded last', async () => {
-        await expect(document.documentElement.dataset.sst).toBe(theme.id)
-        await expect(document.head.lastElementChild?.id).toBe('sst-theme')
+      await step('skin stylesheet is active and loaded last', async () => {
+        await expect(document.documentElement.dataset.skin).toBe(skin.id)
+        await expect(document.head.lastElementChild?.id).toBe('sst-skin')
       })
 
-      await step('primary button uses the SST brand colour', async () => {
-        await userEvent.type(canvas.getByLabelText('Search Criteria 1'), 'Catheter')
-        const submit = canvas.getByRole('button', { name: 'Search' })
+      await step('search submit uses the skin brand colour', async () => {
+        await userEvent.type(canvas.getByLabelText('SKU Number'), 'RPTR071128')
+        const submit = canvas.getByRole('button', { name: 'Enter' })
         await expect(submit).toBeEnabled()
-        // The button fades background-color, so wait out the transition.
         await waitFor(() => expect(getComputedStyle(submit).backgroundColor).toBe(hexToRgb(brand)))
       })
     },
   }
 }
 
-export const Eifu = pageStory(SST_THEMES[0])
-export const ClinicalNavy = pageStory(SST_THEMES[1])
-export const WarmRounded = pageStory(SST_THEMES[2])
-export const HighContrast = pageStory(SST_THEMES[3])
+export const Eifu = skinStory(SKINS[0])
+export const ClinicalNavy = skinStory(SKINS[1])
+export const WarmRounded = skinStory(SKINS[2])
+export const HighContrast = skinStory(SKINS[3])

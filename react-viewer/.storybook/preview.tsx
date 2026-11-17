@@ -3,27 +3,28 @@ import type { Preview } from '@storybook/react-vite'
 import '../src/index.css'
 
 import { INITIAL_VIEWPORTS, MINIMAL_VIEWPORTS } from 'storybook/viewport';
-import { applySstTheme, DEFAULT_SST, SST_THEMES } from '../src/themes/sst';
+import { applySkin, DEFAULT_SKIN, SKINS } from '../src/sst/skins';
 
 const preview: Preview = {
-  // Toolbar switch (paintbrush icon): which subscriber's SST CSS loads after the app styles.
+  // Toolbar switch (paintbrush icon): the SST skin (token overrides) every story wears.
+  // SST layout is not a global: it is the recipe a template story renders.
   globalTypes: {
-    sst: {
-      description: 'SST theme (subscriber CSS loaded after the viewer styles)',
+    skin: {
+      description: 'SST skin: colour, font and radius token overrides',
       toolbar: {
-        title: 'SST',
+        title: 'Skin',
         icon: 'paintbrush',
-        items: SST_THEMES.map((t) => ({ value: t.id, title: t.title, right: t.description })),
+        items: SKINS.map((s) => ({ value: s.id, title: s.title, right: s.description })),
         dynamicTitle: true,
       },
     },
   },
-  initialGlobals: { sst: DEFAULT_SST },
+  initialGlobals: { skin: DEFAULT_SKIN },
 
   decorators: [
     (Story, context) => {
-      // Applied before the story renders, so there is no flash of the base theme.
-      applySstTheme(context.globals.sst ?? DEFAULT_SST)
+      // Applied before the story renders, so there is no flash of the base skin.
+      applySkin(context.globals.skin ?? DEFAULT_SKIN)
       return Story()
     },
   ],
