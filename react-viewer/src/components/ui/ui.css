@@ -338,29 +338,36 @@
   opacity: 1;
 }
 
-/* Mobile/touch: the copy icon is always shown so tap-to-copy is discoverable.
-   No fill at rest or after focus; darken only while pressed and on copy. */
+/* Mobile/touch: there is no hover, only the tap. The copy icon is always
+   shown so tap-to-copy is discoverable. A tap darkens the fill and the icon:
+   while the finger is down (:active) and for the 1.2s Copied state after it
+   lifts, alongside the "Copied … to your clipboard" toast. No teal fill here:
+   the darkened chip is the tap feedback. Sticky :hover/:focus after a tap
+   is reset so the chip returns to rest once the Copied state ends. */
 @media (max-width: 899.98px), (hover: none) {
   .ui-copy-code {
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   .ui-copy-code .ui-icon {
     opacity: 1;
+    transition: opacity 0.12s, color 0.12s;
   }
   .ui-copy-code:hover,
   .ui-copy-code:focus-visible {
     background: transparent;
     color: #3b4248;
   }
-  .ui-copy-code:active {
-    background: #c5d0d7;
-    color: var(--color-neutral-strongest);
-  }
+  .ui-copy-code:active,
   .ui-copy-code--copied,
   .ui-copy-code--copied:hover,
   .ui-copy-code--copied:focus-visible {
-    background: var(--color-brand-primary);
-    color: var(--color-text-on-brand);
+    background: #c5d0d7;
+    color: var(--color-neutral-strongest);
+  }
+  .ui-copy-code:active .ui-icon,
+  .ui-copy-code--copied .ui-icon {
+    color: color-mix(in srgb, var(--color-brand-primary-strong), #000 35%);
   }
 }
 
