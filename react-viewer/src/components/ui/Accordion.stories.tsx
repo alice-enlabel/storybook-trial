@@ -113,7 +113,7 @@ const CODE_SPECS: SpecRow[] = [
   ['Code height', '30', '14px mono text × 1.4 (19.6) + 10 padding'],
   ['Code radius', '4'],
   ['Code ↔ copy icon gap', '8', 'Icon is 1.25em (17.5). On desktop it is hidden at rest but keeps its space, so the width does not change on hover.'],
-  ['Gap between codes', '6 (row and column)', 'Codes wrap onto new lines.'],
+  ['Gap between codes', '6 (row and column)', 'Equal columns fill the width. Each column is as wide as the longest code, and codes that do not fit move to the next row.'],
   ['Row pitch', '36', 'code height + 6 gap'],
   ['Code fill → heading edge', '0', 'Fill is transparent at rest, so the code text looks inset 8 from the heading.'],
   ['Header text → code text', '≈ 19', '14 header bottom padding + 5 code padding'],

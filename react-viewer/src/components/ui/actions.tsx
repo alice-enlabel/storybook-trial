@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { forwardRef, useEffect, useState, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type CSSProperties, type ReactNode } from 'react'
 import { Icon, type IconName } from './Icon'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -133,10 +133,16 @@ export function CopyCode({ code, kind = 'code', onCopy }: CopyCodeProps) {
   )
 }
 
-/** Wrapping list of Copy Codes, e.g. a document's product codes. */
+/**
+ * Copy Codes in equal columns that fill the container width, e.g. a
+ * document's product codes. Code length varies by enterprise and product, so
+ * the column width comes from the longest code. Codes that don't fit on a row
+ * move to the next one.
+ */
 export function CopyCodeList({ codes, kind, onCopy }: { codes: string[] } & Omit<CopyCodeProps, 'code'>) {
+  const longest = codes.reduce((n, code) => Math.max(n, code.length), 0)
   return (
-    <ul className="ui-copy-code-list">
+    <ul className="ui-copy-code-list" style={{ '--copy-code-chars': longest } as CSSProperties}>
       {codes.map((code) => (
         <li key={code}>
           <CopyCode code={code} kind={kind} onCopy={onCopy} />
