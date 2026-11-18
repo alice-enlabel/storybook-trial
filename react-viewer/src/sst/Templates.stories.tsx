@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
 import type { SstRecipe } from './recipe'
-import { hierarchy, newSst, newSstResults, simple, simpleModern } from './recipes'
+import { aliceSstConcept, hierarchy, simple, simpleModern } from './recipes'
 import type { BlockSpec } from './registry'
+import { SKINS, type Skin } from './skins'
 import { SstPage } from './SstPage'
 
 /*
  * An SST is a recipe (./recipes): header, ordered sections, footer, each a
  * block from the library (./registry) in one of its variants, plus a skin.
- * These stories render each recipe as a full page. To prototype a new SST,
- * open Composer and edit its recipe in the Controls panel.
+ * These stories render each recipe as a full page.
  */
 
 const meta = {
@@ -28,11 +28,12 @@ function blockCount(recipe: SstRecipe): number {
   return (recipe.header ? 1 : 0) + count(recipe.sections) + (recipe.footer ? 1 : 0)
 }
 
-function template(recipe: SstRecipe): Story {
+/** A full-page story of `recipe`, in its own skin unless `skin` names another one. */
+function template(recipe: SstRecipe, skin?: Skin): Story {
   return {
-    name: recipe.name,
+    name: skin ? `${recipe.name} · ${skin.title}` : recipe.name,
     args: { recipe },
-    globals: { skin: recipe.skin },
+    globals: { skin: skin?.id ?? recipe.skin },
     parameters: { docs: { description: { story: recipe.description } } },
     play: async ({ canvasElement }) => {
       // Every block in the recipe rendered, so no spec was silently dropped.
@@ -41,34 +42,13 @@ function template(recipe: SstRecipe): Story {
   }
 }
 
+const highContrast = SKINS.find((s) => s.id === 'sample-high-contrast')!
+
 export const SimpleModern = template(simpleModern)
+export const SimpleModernHighContrast = template(simpleModern, highContrast)
 export const Hierarchy = template(hierarchy)
+export const HierarchyHighContrast = template(hierarchy, highContrast)
 export const Simple = template(simple)
-export const NewSst = template(newSst)
-export const NewSstResults = template(newSstResults)
-
-/** The simple SST at phone width: blocks stack below 900px. */
-export const SimpleMobile: Story = { ...template(simple), name: 'Simple · mobile', globals: { skin: simple.skin, viewport: { value: 'mobile2', isRotated: false } } }
-
-/**
- * Start a new SST here: edit `recipe` in the Controls panel (add, remove or
- * reorder sections, switch a block's variant, change its content) and the page
- * re-renders. Copy the JSON into a new file in src/sst/recipes/ when it works.
- */
-export const Composer: Story = {
-  args: {
-    recipe: {
-      id: 'draft',
-      name: 'Draft SST',
-      description: 'Scratch recipe for composing a new SST.',
-      skin: 'eifu',
-      header: { type: 'header', props: { variant: 'links', items: ['Home', 'Favorites', 'Recent'] } },
-      sections: [
-        { type: 'hero', props: { variant: 'brand', title: 'Welcome to the eIFU Website' }, children: [{ type: 'search', props: { variant: 'bar', fields: ['REF number'] } }] },
-        { type: 'labelGuide', props: { heading: 'How to Read Product Labels', text: ['Configurable instructions.'] } },
-        { type: 'categories', props: { categories: [{ label: 'Category 1' }, { label: 'Category 2' }, { label: 'Category 3' }, { label: 'Category 4' }] } },
-      ],
-      footer: { type: 'footer', props: { columns: [{ heading: 'Support', links: ['Tutorial'] }] } },
-    },
-  },
-}
+export const SimpleHighContrast = template(simple, highContrast)
+export const AliceSstConcept = template(aliceSstConcept)
+export const AliceSstConceptHighContrast = template(aliceSstConcept, highContrast)

@@ -10,9 +10,8 @@ An SST (Subscriber Site Template) is assembled from three layers. Storybook show
 
 ## Make a new SST
 
-1. Open **SST/Templates → Composer** and edit `recipe` in the Controls panel until the page is right.
-2. Copy that JSON into `recipes/<id>.ts` as an `SstRecipe`, add it to `recipes/index.ts`, and add a story line in `Templates.stories.tsx`. The story's test fails if any block in the recipe does not render.
-3. If the subscriber needs its own colours, copy `skins/_template.css`, register it in `skins/index.ts`, and set the recipe's `skin`.
+1. Copy the closest recipe in `recipes/` into `recipes/<id>.ts` as an `SstRecipe` and edit it until the page is right. Add it to `recipes/index.ts`, and add a story line in `Templates.stories.tsx`. The story's test fails if any block in the recipe does not render.
+2. If the subscriber needs its own colours, copy `skins/_template.css`, register it in `skins/index.ts`, and set the recipe's `skin`.
 
 A recipe that names an unknown variant or prop fails the typecheck: `BlockSpec` checks each block's props against its component.
 
@@ -34,7 +33,7 @@ A recipe that names an unknown variant or prop fails the typecheck: `BlockSpec` 
 | `intro` | | Figma 35:85 |
 | `labelGuide` | image-left, image-top | Figma 157:2834 / 35:85, live SimpleModernSST |
 | `categories` | | Figma 157:2834 "Search by Category" |
-| `shelf` | | Figma 157:2834 "Recently Published" |
+| `shelf` | | Figma 157:2834 "Recently Published". Renders the document page's Related carousel (`../viewer/RelatedDocs.tsx`) |
 | `resources` | | Figma 157:2834 "Additional Resources" |
 | `hierarchy` | | live Hierarchy, Figma 57:489 |
 | `footer` | | shared with the document viewer |

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import baseTokens from '../styles/tokens.css?inline'
-import { newSst } from './recipes'
+import { aliceSstConcept } from './recipes'
 import { SKINS, type Skin } from './skins'
 import { SstPage } from './SstPage'
 
@@ -50,7 +50,7 @@ function TokenReport({ skin }: { skin: Skin }) {
         <thead>
           <tr style={{ textAlign: 'left', borderBottom: '2px solid #cecece' }}>
             <th style={{ padding: 6 }}>Token</th>
-            <th style={{ padding: 6 }}>eIFU base</th>
+            <th style={{ padding: 6 }}>Default</th>
             <th style={{ padding: 6 }}>Resolved in this skin</th>
           </tr>
         </thead>
@@ -95,12 +95,12 @@ export const Tokens: Story = {
   render: (_args, { globals }) => <TokenReport skin={SKINS.find((s) => s.id === globals.skin) ?? SKINS[0]} />,
 }
 
-/** The New SST home in one skin. The play test proves the skin's brand colour reaches a block. */
+/** The Alice SST Concept page in one skin. The play test proves the skin's brand colour reaches a block. */
 function skinStory(skin: Skin): Story {
   return {
     name: skin.title,
     globals: { skin: skin.id, viewport: { value: 'desktop', isRotated: false } },
-    render: () => <SstPage recipe={newSst} />,
+    render: () => <SstPage recipe={aliceSstConcept} />,
     play: async ({ canvasElement, step }) => {
       const canvas = within(canvasElement)
       const brand = declaredTokens(skin.css).get('--color-brand-primary') ?? BASE.get('--color-brand-primary')!
@@ -122,6 +122,5 @@ function skinStory(skin: Skin): Story {
 
 const skin = (id: string) => SKINS.find((s) => s.id === id)!
 
-export const Eifu = skinStory(skin('eifu'))
-export const ClinicalNavy = skinStory(skin('sample-clinical-navy'))
+export const Default = skinStory(skin('default'))
 export const HighContrast = skinStory(skin('sample-high-contrast'))

@@ -3,7 +3,7 @@ import { expect, userEvent, within } from 'storybook/test'
 import { FOOTER, HIERARCHY, LABEL_GUIDE_TEXT } from '../recipes/content'
 import { BarcodeScan } from './BarcodeScan'
 import { CategoryCarousel } from './CategoryCarousel'
-import { DocumentShelf } from './DocumentShelf'
+import { RelatedDocs } from '../../viewer/RelatedDocs'
 import { Footer } from './Footer'
 import { HierarchyTree } from './HierarchyTree'
 import { IntroCard } from './IntroCard'
@@ -54,9 +54,11 @@ export const Categories: Story = {
   render: () => <CategoryCarousel categories={['Category 1', 'Category 2', 'Category 3', 'Category 4', 'Category 5'].map((label) => ({ label }))} />,
 }
 
-/** Figma new SST "Recently Published". */
+/** Figma new SST "Recently Published": the document page's Related carousel with its own heading. */
 export const RecentlyPublished: Story = {
-  render: () => <DocumentShelf documents={Array.from({ length: 6 }, () => ({ title: 'Document Title', path: 'Hierarchy > Hierarchy 2' }))} />,
+  render: () => (
+    <RelatedDocs heading="Recently Published" docs={Array.from({ length: 6 }, () => ({ title: 'Document Title', crumb: 'Hierarchy > Hierarchy 2' }))} />
+  ),
 }
 
 /** Figma new SST "Additional Resources": links beside an FAQ accordion. */

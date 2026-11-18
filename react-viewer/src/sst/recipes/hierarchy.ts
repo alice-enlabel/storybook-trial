@@ -6,7 +6,7 @@ export const hierarchy: SstRecipe = {
   id: 'hierarchy',
   name: 'Hierarchy (live)',
   description: 'Title header, barcode scan beside a filtered text search, publisher hierarchy tree.',
-  skin: 'eifu',
+  skin: 'default',
   header: { type: 'header', props: { variant: 'title', title: 'Hierarchy', signIn: false } },
   sections: [
     {

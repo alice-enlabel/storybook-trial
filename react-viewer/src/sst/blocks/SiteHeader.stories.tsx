@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { SiteHeader } from './SiteHeader'
-import { desktop, inPage, mobile } from './story-utils'
+import { inPage } from './story-utils'
 
 const meta = {
   title: 'SST/Blocks/Site Header',
@@ -31,5 +31,3 @@ export const Links: Story = {
   args: { variant: 'links', title: undefined, items: ['Home', 'Favorites', 'Recent', 'Setup'], menu: false },
 }
 
-export const LinksMobile: Story = { ...Links, globals: mobile }
-export const BarDesktop: Story = { ...Bar, globals: desktop }

@@ -6,7 +6,7 @@ export const simple: SstRecipe = {
   id: 'simple',
   name: 'Simple (Figma 35:85)',
   description: 'Text-link header, brand wordmark hero, intro card, one search field, label guide.',
-  skin: 'eifu',
+  skin: 'default',
   header: {
     type: 'header',
     props: { variant: 'links', items: ['Home', 'Favorites', 'Recent', 'Setup'], menu: false },

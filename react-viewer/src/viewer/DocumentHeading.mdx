@@ -1,0 +1,56 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import * as HeadingStories from './DocumentHeading.stories'
+
+<Meta of={HeadingStories} name="Specs" />
+
+# Document Heading
+
+Everything between the search card and the PDF: navigation, title, metadata line and action bar.
+The layout changes at two viewport widths, so the states are separate stories (Mobile, Small Phone, Desktop, and the open states). Pick one in the sidebar to see it at its real size.
+
+Breakpoints: **small phone** under 420px, **mobile** 420–899px, **desktop** 900px and up.
+Source: `DocumentHeading.tsx`, styles in `viewer.css` (`.page__nav`, `.doc-header`) and `ui.css` (Breadcrumb, Back Link, Content Header, Icon Button).
+
+## Navigation
+
+| Part | Mobile and small phone | Desktop |
+|---|---|---|
+| Shown | `‹ Documents` link only | Breadcrumbs, then Back to Search below |
+| Space above (from the search card) | 16px | 28px |
+| `‹ Documents` | 400 15px / 1.4, `--color-text-accent` | Hidden |
+| Breadcrumbs | Hidden | 400 20px / 1.4, `--color-text-secondary`; `>` separator with 0.3em each side; links underline on hover; the last crumb is the current page (`aria-current="page"`), not a link |
+| Back to Search | Hidden | 400 20px / 1.4, `--color-neutral-strongest`; 28px arrow-left icon, 18px gap; label underlines on hover |
+| Breadcrumbs to Back to Search | — | 14px gap, left-aligned column |
+
+## Title and metadata
+
+| Part | Small phone | Mobile | Desktop |
+|---|---|---|---|
+| Container | No border; padding 4px top, 8px bottom | same | 12px above; padding 14px top, 30px sides, 10px bottom; 1px `#9da2a6` rule above and below |
+| Layout | Title and action bar share row 1, 6px apart; metadata spans row 2 | same | Title and metadata stacked on the left, action bar on the right, top-aligned |
+| Title (`h1`) | 700 20px / 1.2 | 700 22px / 1.2 | 400 44px / 1.2 |
+| Title colour | `--color-neutral-strongest`, balanced wrapping | same | same |
+| Metadata line | 400 13px / 1.4 | 400 14px / 1.4, 4px above | 400 20px / 1.4, no extra space |
+| Metadata colour | `--color-text-secondary`, tabular numbers | same | same |
+| Metadata format | `PDF · 29 pages · 319 KB · Version 1 · Released 12/19/2025`: format, page count, file size, version, release date, joined with ` · ` | same | same |
+
+## Action bar
+
+Three icon buttons, in order: **Document Information** (`info`), **QR Code** (`qr-code`), **Actions** (`more-vertical`).
+
+| Part | Small phone | Mobile | Desktop |
+|---|---|---|---|
+| Button size | 32 × 36px, 6px radius | 40 × 40px | 54 × 54px |
+| Glyph | 26px (kebab 22px) | 30px (kebab 26px) | 44px (kebab 40px) |
+| Gap between buttons | 0, and the bar sits 4px into the right gutter | 2px | 6px; bar starts 10px below the container's top |
+| Tooltip | Shows the label on hover and focus. The Actions tooltip is end-aligned so it stays on screen. Hidden while that button's panel or popover is open. | same | same |
+| Selected | The button shows selected while its panel, popover or menu is open | same | same |
+
+### Behaviour
+
+- **Document Information** toggles the info panel (`aria-expanded`, `aria-controls="docinfo"`) and closes any open popover. When the panel closes, focus returns to this button.
+- **QR Code** opens a dialog popover (`aria-haspopup="dialog"`) with the document QR code and a **Download PNG** link.
+- **Actions** opens a menu (`aria-haspopup="menu"`) with six items: Add to favorites (Remove from favorites once added), Print, Download, Request paper copy, Email document, Copy link. Arrow keys, Home and End move through it. Choosing an item closes the menu, returns focus to the button and runs the action.
+- Popovers open 6px below their trigger, right-aligned to it, above the page (z-index 40; the action bar is at 30).
+- Only one popover is open at a time. Escape or a click outside closes it. While a popover is open, Escape closes only the popover, not the info panel.
+- Under 900px a scrim (`rgba(26, 26, 26, 0.09)`, fades in over `--duration-fast`) covers the page behind an open popover. Desktop has no scrim.

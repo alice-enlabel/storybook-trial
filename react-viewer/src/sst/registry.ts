@@ -5,7 +5,6 @@
 import type { ComponentProps, ComponentType } from 'react'
 import { BarcodeScan } from './blocks/BarcodeScan'
 import { CategoryCarousel } from './blocks/CategoryCarousel'
-import { DocumentShelf } from './blocks/DocumentShelf'
 import { Footer } from './blocks/Footer'
 import { Hero } from './blocks/Hero'
 import { HierarchyTree } from './blocks/HierarchyTree'
@@ -15,6 +14,7 @@ import { Resources } from './blocks/Resources'
 import { Row } from './blocks/Row'
 import { SearchBlock } from './blocks/SearchBlock'
 import { SiteHeader } from './blocks/SiteHeader'
+import { RelatedDocs } from '../viewer/RelatedDocs'
 
 export const BLOCKS = {
   header: SiteHeader,
@@ -24,7 +24,8 @@ export const BLOCKS = {
   intro: IntroCard,
   labelGuide: LabelGuide,
   categories: CategoryCarousel,
-  shelf: DocumentShelf,
+  // The document page's Related carousel: one card design across the site.
+  shelf: RelatedDocs,
   resources: Resources,
   hierarchy: HierarchyTree,
   footer: Footer,

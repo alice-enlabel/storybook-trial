@@ -8,14 +8,18 @@ export type SearchBlockProps = {
    * `bar`: one wide field with barcode and submit inside (SimpleModernSST, new SST hero).
    * `filtered`: "Text Search" card with one labelled field per criterion (live Hierarchy).
    * `card`: titled card with one field and an icon button (Figma simple SST 35:85).
+   * `criteria`: untitled card of labelled fields (document page). Mobile: stacked
+   *   fields and an icon-only 86x40 submit. Desktop (>=900px): two columns and a
+   *   full-width labelled submit.
    */
-  variant: 'bar' | 'filtered' | 'card'
-  /** Field labels. `bar` and `card` use the first one. */
+  variant: 'bar' | 'filtered' | 'card' | 'criteria'
+  /** Field labels. `bar` and `card` use the first one; `filtered` and `criteria` show them all. */
   fields?: string[]
   heading?: string
   submitLabel?: string
   /** Chips under the bar (Figma "Popular Suggestion"). */
   suggestions?: string[]
+  /** Scan button inside the fields (`bar` and `filtered` only). */
   barcode?: boolean
   onSearch?: (values: string[]) => void
   idBase?: string
@@ -32,7 +36,8 @@ export function SearchBlock({
   idBase,
 }: SearchBlockProps) {
   const p = blockParts(idBase ?? (variant === 'filtered' ? 'search_bar_filtered' : 'search_bar'))
-  const shown = variant === 'filtered' ? fields : fields.slice(0, 1)
+  const multi = variant === 'filtered' || variant === 'criteria'
+  const shown = multi ? fields : fields.slice(0, 1)
   const [values, setValues] = useState(() => shown.map(() => ''))
   const hasQuery = values.some((v) => v.trim() !== '')
   const set = (i: number, v: string) => setValues((prev) => prev.map((x, j) => (j === i ? v : x)))
@@ -71,9 +76,9 @@ export function SearchBlock({
               id={p(`input_text_${i}_control`)}
               labelId={p(`input_text_${i}_label`)}
               label={label}
-              showLabel={variant === 'filtered'}
+              showLabel={multi}
               leadingIcon={variant === 'bar' ? 'search' : undefined}
-              scan={barcode && variant !== 'card'}
+              scan={barcode && (variant === 'bar' || variant === 'filtered')}
               value={values[i]}
               placeholder={variant === 'bar' ? label : undefined}
               onChange={(e) => set(i, e.target.value)}
@@ -84,10 +89,10 @@ export function SearchBlock({
             className="sst-search__submit"
             id={p('button_search')}
             disabled={!hasQuery}
-            aria-label={variant === 'card' ? submitLabel : undefined}
+            aria-label={variant === 'card' || variant === 'criteria' ? submitLabel : undefined}
           >
             <Icon name="search" />
-            {variant !== 'card' && <span>{submitLabel}</span>}
+            {variant !== 'card' && <span className="sst-search__submit-label">{submitLabel}</span>}
           </button>
         </div>
         {suggestions.length > 0 && (

@@ -1,17 +1,34 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { Icon } from '../components/ui'
 import line from '../assets/images/line.svg'
+import defaultCover from '../assets/images/related-cover.png'
 
-type RelatedDoc = { id: string; title: string; crumb: string; cover: string }
-
-type RelatedDocsProps = {
-  docs: RelatedDoc[]
-  onAction: (message: string) => void
+export type RelatedDoc = {
+  title: string
+  /** Hierarchy path above the title, e.g. "Hierarchy > Hierarchy 2". */
+  crumb?: string
+  /** Cover image. Default: the sample document cover. */
+  cover?: string
+  /** Stable key, for favourites. Default: the card's position. */
+  id?: string
 }
 
-/** Related documents: a horizontal, scroll-snapping row of cards. */
-export function RelatedDocs({ docs, onAction }: RelatedDocsProps) {
+export type RelatedDocsProps = {
+  docs: RelatedDoc[]
+  /** Section heading: "Related" on the document page, "Recently Published" on an SST home. */
+  heading?: string
+  /** Feedback for card actions (open, favourite, QR), e.g. a toast. */
+  onAction?: (message: string) => void
+}
+
+/**
+ * The one document-card carousel: a heading over a rule, then a horizontal,
+ * scroll-snapping row of cards (cover, hierarchy path, title, favourite and QR
+ * buttons). Used by the document page and by SSTs as the `shelf` block.
+ */
+export function RelatedDocs({ docs, heading = 'Related', onAction = () => {} }: RelatedDocsProps) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const titleId = useId()
 
   const toggleFavorite = (id: string) => {
     const on = !favorites.has(id)
@@ -25,21 +42,23 @@ export function RelatedDocs({ docs, onAction }: RelatedDocsProps) {
   }
 
   return (
-    <section className="related" aria-labelledby="related-title">
+    // data-block: SST pages count and target blocks by it (this is the `shelf` block).
+    <section className="related" data-block="shelf" aria-labelledby={titleId}>
       <div className="related-head">
-        <h2 id="related-title">Related</h2>
+        <h2 id={titleId}>{heading}</h2>
         <img src={line} alt="" width={1473} height={2} />
       </div>
       <div className="cards">
         {docs.map((d, i) => {
-          const fav = favorites.has(d.id)
+          const key = d.id ?? `doc-${i}`
+          const fav = favorites.has(key)
           return (
-            <article key={d.id} className="doc-card">
-              <button type="button" className="open" aria-label={`Open ${d.title} ${i + 1}`} onClick={() => onAction('Opens this related document')}>
-                <img src={d.cover} alt="" width={244} height={351} loading="lazy" />
+            <article key={key} className="doc-card">
+              <button type="button" className="open" aria-label={`Open ${d.title} ${i + 1}`} onClick={() => onAction('Opens this document')}>
+                <img src={d.cover ?? defaultCover} alt="" width={244} height={351} loading="lazy" />
               </button>
               <div className="card-body">
-                <div className="crumb">{d.crumb}</div>
+                {d.crumb && <div className="crumb">{d.crumb}</div>}
                 <h3 className="title">{d.title}</h3>
                 <div className="card-actions">
                   <button
@@ -48,7 +67,7 @@ export function RelatedDocs({ docs, onAction }: RelatedDocsProps) {
                     aria-pressed={fav}
                     aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
                     title={fav ? 'Remove from favorites' : 'Add to favorites'}
-                    onClick={() => toggleFavorite(d.id)}
+                    onClick={() => toggleFavorite(key)}
                   >
                     <Icon name={fav ? 'favorite-filled' : 'favorite'} />
                   </button>

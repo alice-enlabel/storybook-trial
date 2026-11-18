@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, within } from 'storybook/test'
 import { SearchBlock } from './SearchBlock'
-import { inBand } from './story-utils'
+import { desktop, inBand, mobile } from './story-utils'
 
 const meta = {
   title: 'SST/Blocks/Search',
@@ -22,6 +22,28 @@ export const Filtered: Story = { args: { variant: 'filtered', fields: ['Product 
 
 /** Titled card with an icon submit (Figma simple SST 35:85). */
 export const Card: Story = { args: { variant: 'card', fields: ['Search Criteria 1'] } }
+
+const criteria = { variant: 'criteria', fields: ['Search Criteria 1', 'Search Criteria 2'] } as const
+
+const typeQuery: Story['play'] = async ({ canvasElement }) => {
+  const canvas = within(canvasElement)
+  const submit = canvas.getByRole('button', { name: 'Search' })
+  await expect(submit).toBeDisabled()
+  await userEvent.type(canvas.getByLabelText('Search Criteria 1'), 'Catheter')
+  await expect(submit).toBeEnabled()
+}
+
+/** Document page, mobile: icon-only 86x40 submit, grey and disabled until a field has text. */
+export const CriteriaMobileEmpty: Story = { args: criteria, globals: mobile }
+
+/** Document page, mobile: icon-only submit in the brand colour once a field has text. */
+export const CriteriaMobileWithQuery: Story = { args: criteria, globals: mobile, play: typeQuery }
+
+/** Document page, desktop: two columns, full-width labelled submit, disabled until a field has text. */
+export const CriteriaDesktopEmpty: Story = { args: criteria, globals: desktop }
+
+/** Document page, desktop: full-width labelled submit in the brand colour once a field has text. */
+export const CriteriaDesktopWithQuery: Story = { args: criteria, globals: desktop, play: typeQuery }
 
 /** Submit stays disabled until a field has text, then reports every field's value. */
 export const SubmitsValues: Story = {

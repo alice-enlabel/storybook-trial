@@ -1,87 +1,44 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  AppHeader,
-  BackLink,
-  Breadcrumb,
-  ContentHeader,
-  IconButton,
-  MediaPopover,
-  Menu,
-  type MenuEntry,
-} from '../components/ui'
+import { AppHeader } from '../components/ui'
 import { usePresence } from '../components/ui/usePresence'
 import logo from '../assets/images/eifu-logo.png'
 import { DocInfoPanel } from './DocInfoPanel'
+import { DocumentHeading, type DocumentActionId } from './DocumentHeading'
 import { PdfViewer } from './PdfViewer'
 import { Ratings } from './Ratings'
 import { RelatedDocs } from './RelatedDocs'
-import { SearchCard } from './SearchCard'
+import { SearchBlock } from '../sst/blocks/SearchBlock'
 import { SiteFooter } from './SiteFooter'
 import { copiedMessage, useToast } from './Toast'
 import type { ViewerDocument } from './document-data'
-
-type Popover = 'qr' | 'actions' | null
 
 /** Exit animation length for the info panel/sheet; matches --duration-panel. */
 const PANEL_EXIT_MS = 240
 
 export function DocumentPage({ doc }: { doc: ViewerDocument }) {
   const [infoOpen, setInfoOpen] = useState(false)
-  const [popover, setPopover] = useState<Popover>(null)
   const [favorite, setFavorite] = useState(false)
   const { toast, toastRegion } = useToast()
   const panel = usePresence(infoOpen, PANEL_EXIT_MS)
 
   const infoRef = useRef<HTMLButtonElement>(null)
-  const qrRef = useRef<HTMLButtonElement>(null)
-  const actionsRef = useRef<HTMLButtonElement>(null)
-  const triggersRef = useRef<HTMLDivElement>(null)
-
-  const closePopover = useCallback(
-    (returnFocus = true) => {
-      const trigger = popover === 'qr' ? qrRef : actionsRef
-      setPopover(null)
-      if (returnFocus) trigger.current?.focus()
-    },
-    [popover],
-  )
 
   const closeInfo = useCallback(() => {
     setInfoOpen(false)
     infoRef.current?.focus({ preventScroll: true })
   }, [])
 
-  // One Escape handler: the open popover first, then the info panel.
+  // Escape closes the info panel. DocumentHeading handles Escape first while a popover is open.
   useEffect(() => {
+    if (!infoOpen) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return
-      if (popover) closePopover()
-      else if (infoOpen) closeInfo()
+      if (e.key === 'Escape') closeInfo()
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [popover, infoOpen, closePopover, closeInfo])
+  }, [infoOpen, closeInfo])
 
-  useEffect(() => {
-    if (!popover) return
-    const onDown = (e: PointerEvent) => {
-      if (!triggersRef.current?.contains(e.target as Node)) closePopover(false)
-    }
-    document.addEventListener('pointerdown', onDown)
-    return () => document.removeEventListener('pointerdown', onDown)
-  }, [popover, closePopover])
-
-  const actions: MenuEntry[] = [
-    { id: 'favorite', label: favorite ? 'Remove from favorites' : 'Add to favorites', icon: favorite ? 'favorite-filled' : 'favorite' },
-    { id: 'print', label: 'Print', icon: 'print' },
-    { id: 'download', label: 'Download', icon: 'download' },
-    { id: 'paper', label: 'Request paper copy', icon: 'request-paper-copy' },
-    { id: 'email', label: 'Email document', icon: 'email' },
-    { id: 'copy', label: 'Copy link', icon: 'copy-link' },
-  ]
-
-  const runAction = async (id: string) => {
-    closePopover()
+  const runAction = async (id: DocumentActionId) => {
     switch (id) {
       case 'favorite':
         setFavorite((f) => !f)
@@ -118,8 +75,6 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
     toast(ok ? copiedMessage(code) : `Couldn't copy ${code}. Select the code to copy it.`)
   }
 
-  const { meta } = doc
-  const metaLine = `${meta.format} · ${meta.pages} pages · ${meta.size} · Version ${meta.version} · Released ${meta.released}`
   const withInfo = panel.mounted && panel.state === 'open'
 
   return (
@@ -127,89 +82,22 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
       <AppHeader logo={<img src={logo} alt="eIFU" width={198} height={100} className="page__logo" />} onMenu={() => toast('Site menu')} />
 
       <main className="page__main">
-        <SearchCard onSearch={() => toast('Search runs on the live site; this prototype covers the document view.')} />
-
-        <div className="page__nav">
-          <a href="#" className="page__nav-mobile">
-            ‹ Documents
-          </a>
-          <div className="page__nav-desktop">
-            <Breadcrumb items={doc.breadcrumb} />
-            <BackLink href="#">Back to Search</BackLink>
-          </div>
-        </div>
-
-        <div className="doc-header">
-          <ContentHeader
-            title={doc.title}
-            meta={metaLine}
-            actions={
-              <div ref={triggersRef} className="doc-header__triggers">
-                <IconButton
-                  ref={infoRef}
-                  icon="info"
-                  label="Document Information"
-                  selected={infoOpen}
-                  hideTooltip={infoOpen}
-                  aria-expanded={infoOpen}
-                  aria-controls="docinfo"
-                  onClick={() => {
-                    setPopover(null)
-                    setInfoOpen((o) => !o)
-                  }}
-                />
-                <div className="doc-header__anchor">
-                  <IconButton
-                    ref={qrRef}
-                    icon="qr-code"
-                    label="QR Code"
-                    selected={popover === 'qr'}
-                    hideTooltip={popover === 'qr'}
-                    aria-haspopup="dialog"
-                    aria-expanded={popover === 'qr'}
-                    aria-controls="qr-popover"
-                    onClick={() => setPopover((p) => (p === 'qr' ? null : 'qr'))}
-                  />
-                  {popover === 'qr' && (
-                    <MediaPopover
-                      id="qr-popover"
-                      label="Document QR code"
-                      src={doc.qrCode}
-                      alt={`QR code linking to ${doc.title}`}
-                      downloadLabel="Download PNG"
-                      downloadName="eIFU-Comprehensive-Guide-QR.png"
-                      className="doc-header__popover"
-                    />
-                  )}
-                </div>
-                <div className="doc-header__anchor">
-                  <IconButton
-                    ref={actionsRef}
-                    icon="more-vertical"
-                    label="Actions"
-                    className="doc-header__kebab ui-icon-button--tip-end"
-                    selected={popover === 'actions'}
-                    hideTooltip={popover === 'actions'}
-                    aria-haspopup="menu"
-                    aria-expanded={popover === 'actions'}
-                    aria-controls="actions-menu"
-                    onClick={() => setPopover((p) => (p === 'actions' ? null : 'actions'))}
-                  />
-                  {popover === 'actions' && (
-                    <Menu
-                      id="actions-menu"
-                      label="Document actions"
-                      items={actions}
-                      onSelect={(id) => void runAction(id)}
-                      onClose={closePopover}
-                      className="doc-header__popover"
-                    />
-                  )}
-                </div>
-              </div>
-            }
+        <div className="page__search">
+          <SearchBlock
+            variant="criteria"
+            fields={['Search Criteria 1', 'Search Criteria 2']}
+            onSearch={() => toast('Search runs on the live site; this prototype covers the document view.')}
           />
         </div>
+
+        <DocumentHeading
+          doc={doc}
+          infoOpen={infoOpen}
+          onToggleInfo={() => setInfoOpen((o) => !o)}
+          infoRef={infoRef}
+          favorite={favorite}
+          onAction={(id) => void runAction(id)}
+        />
 
         <div className={['stage', withInfo && 'stage--with-info'].filter(Boolean).join(' ')}>
           <div className="stage__viewer">
@@ -232,7 +120,6 @@ export function DocumentPage({ doc }: { doc: ViewerDocument }) {
 
       <SiteFooter columns={doc.footer} />
 
-      {popover && <div className="scrim" aria-hidden="true" />}
       {toastRegion}
     </div>
   )

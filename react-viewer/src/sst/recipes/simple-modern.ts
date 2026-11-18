@@ -6,7 +6,7 @@ export const simpleModern: SstRecipe = {
   id: 'simple-modern',
   name: 'SimpleModernSST (live)',
   description: 'Brand bar header, brand hero with one search bar, label guide.',
-  skin: 'eifu',
+  skin: 'default',
   header: { type: 'header', props: { variant: 'bar', title: 'SimpleModernSST', menu: true } },
   sections: [
     {
