@@ -55,11 +55,13 @@ export function RelatedDocs({ docs, heading = 'Related', onAction = () => {} }: 
           return (
             <article key={key} className="doc-card">
               <button type="button" className="open" aria-label={`Open ${d.title} ${i + 1}`} onClick={() => onAction('Opens this document')}>
-                <img src={d.cover ?? defaultCover} alt="" width={244} height={351} loading="lazy" />
+                <img src={d.cover ?? defaultCover} alt="" width={158} height={220} loading="lazy" />
               </button>
               <div className="card-body">
                 {d.crumb && <div className="crumb">{d.crumb}</div>}
-                <h3 className="title">{d.title}</h3>
+                <h3 className="title" title={d.title}>
+                  {d.title}
+                </h3>
                 <div className="card-actions">
                   <button
                     type="button"
@@ -71,7 +73,7 @@ export function RelatedDocs({ docs, heading = 'Related', onAction = () => {} }: 
                   >
                     <Icon name={fav ? 'favorite-filled' : 'favorite'} />
                   </button>
-                  <button type="button" aria-label="Show QR code" title="QR code" onClick={() => onAction('Opens this document’s QR code')}>
+                  <button type="button" className="qr" aria-label="Show QR code" title="QR code" onClick={() => onAction('Opens this document’s QR code')}>
                     <Icon name="qr-code" />
                   </button>
                 </div>

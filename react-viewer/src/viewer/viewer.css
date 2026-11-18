@@ -654,9 +654,10 @@ html.fs-lock {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 152px;
+  width: 190px;
   overflow: clip;
-  border-radius: 5px;
+  border: 1px solid #000;
+  border-radius: 5px 5px 10px 10px;
   scroll-snap-align: start;
   transition: translate 0.15s;
 }
@@ -676,7 +677,9 @@ html.fs-lock {
 .doc-card .open {
   display: block;
   width: 100%;
-  aspect-ratio: 244 / 351;
+  aspect-ratio: 158 / 220;
+  /* Without this the cover image's own height (244:351) beats aspect-ratio. */
+  overflow: hidden;
   padding: 0;
   border: 0;
   background: none;
@@ -692,8 +695,7 @@ html.fs-lock {
   display: grid;
   gap: 5px;
   padding: 10px;
-  border: 1px solid #000;
-  border-radius: 0 0 10px 10px;
+  border-top: 1px solid #000;
   background: #fff;
 }
 .card-body .crumb,
@@ -705,10 +707,11 @@ html.fs-lock {
 }
 .card-body .crumb {
   font-size: 12.5px;
+  line-height: 1.4;
 }
 .card-body .title {
   margin: 0;
-  font: 400 17.5px/1.3 var(--font-family);
+  font: 400 17.5px/1.4 var(--font-family);
 }
 .card-actions {
   display: flex;
@@ -731,7 +734,8 @@ html.fs-lock {
 .card-actions button:hover {
   background: var(--color-border-subtle);
 }
-.card-actions .fav {
+.card-actions .fav,
+.card-actions .qr {
   color: var(--color-icon-accent);
 }
 
